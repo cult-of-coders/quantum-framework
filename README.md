@@ -1,7 +1,17 @@
 Quantum Framework
 ==============================================
 
-1. Concepts
+The quantum framework is a framework based on meteor which enables the developer
+to code fast and organized solving most of the common problems in meteor:
+
+- Collection Security
+- Easy-to-create paginated lists with optimized subscriptions
+- Global Event Manager
+- Plugin Support
+- 
+
+
+Concepts
 
 - Plugins
 - Atoms

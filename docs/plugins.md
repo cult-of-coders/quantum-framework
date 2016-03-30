@@ -56,6 +56,11 @@ let instance = Q('service todo').build(1,2,3);
 Example usage:
 
 ```
+// this syntax is just an example to make someone unfamiliar to the framework understand easier
+// please use: Q('template myTemplate', { onCreated: () }
+// or if you want built in use, read more about Templating Listify
+
+Template.myTemplate.onCreated(function() {
     this._paginator = Q('service ui.paginator').build(mongoCollection, {
         subscriptionName: subscriptionName,
         countMethod: "mycountMethod",
@@ -70,14 +75,13 @@ Example usage:
     
     // display the navigation within your template:
     {{> QuantumPaginator }}
+});
 ```
 
 Templating Listify
 ====================================
 
-Will include "items" + "pagination" + "filters" on a template as helpers
-and provide a standard template which you can re-use.
-
+Creating paginated list in no-time.
 ```
 Q('template-listify templateName', {
     collection: 'collection-name' // requires to be exposed using collection-exposure.
@@ -234,5 +238,6 @@ Q('method my.method.name', {
         // you can use this.userId and everything you can use in a method.
     }
 });
+
 
 // call it using Meteor.call(my.method.name)

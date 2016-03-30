@@ -4,7 +4,7 @@ let plugin = class extends Quantum.Model.Plugin {
     build(atom) {
         let config = atom.config;
         let collection = Quantum.instance.use('collection', config.collection);
-        let subscriptionName = config.collection;
+        let subscriptionName = config.collection; // collection-exposure uses the same
 
         let filters = {}, options = {};
         if (config.filters) { filters = config.filters() }
@@ -59,6 +59,10 @@ let plugin = class extends Quantum.Model.Plugin {
                 defaultValue: 10
             }
         };
+    }
+
+    requires() {
+        return ['collection-exposure'];
     }
 
     executionContext() {

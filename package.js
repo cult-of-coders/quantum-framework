@@ -46,6 +46,7 @@ Package.onUse(function (api) {
     ], 'server');
 
     api.addFiles([
+        'plugins/client/collection-exposure.js',
         'plugins/client/template.js',
         'plugins/client/viewmodel.js',
         'plugins/client/template-behaviors.js',

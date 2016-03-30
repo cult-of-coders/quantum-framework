@@ -2,7 +2,7 @@ Package.describe({
     name: 'cultofcoders:quantum-framework',
     version: '0.0.1',
     summary: 'Aggregates the quantum framework core and plugins.',
-    git: '',
+    git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
 });
 
@@ -16,7 +16,6 @@ Package.onUse(function (api) {
         'manuel:viewmodel@4.0.6',
         'aldeed:autoform@5.8.1',
         'alanning:roles@1.2.15',
-        'cultofcoders:quantum-core@0.0.1',
         'raix:handlebar-helpers@0.2.5',
         'aldeed:template-extension@4.0.0',
         'yasaricli:slugify@0.0.7',

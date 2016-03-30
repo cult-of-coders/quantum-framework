@@ -41,6 +41,12 @@ data = function(keyOrObject, optionalValue) {
     tpl()._reactiveData.set(_data);
 };
 
+form = function (key, formId) {
+    let value = AutoForm.getFieldValue(key);
+
+    return AutoForm.getFieldValue(key);
+};
+
 
 Template.registerHelper('tpl', function () {
     return tpl();
@@ -48,6 +54,10 @@ Template.registerHelper('tpl', function () {
 
 Template.registerHelper('data', function (...args) {
     return data(...args);
+});
+
+Template.registerHelper('form', function (key, formId) {
+    return form(key, formId);
 });
 
 Template.registerHelper('selectize', function(object) {
@@ -80,14 +90,6 @@ Template.registerHelper('formatNumber', function(number) {
     }
 
     return (number.toFixed(2)) + "h";
-});
-
-Template.registerHelper('fieldValue', function(field) {
-    return AutoForm.getFieldValue(field);
-});
-
-Template.registerHelper('ifFieldValue', function(field, value) {
-    return AutoForm.getFieldValue(field) === value;
 });
 
 Template.registerHelper('slugify', function(value) {

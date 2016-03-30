@@ -73,7 +73,7 @@ Package.onUse(function (api) {
 
     api.addFiles('boot.js');
 
-    api.export(['tpl', 'data'])
+    api.export(['tpl', 'data', 'form'], 'client');
 });
 
 Package.onTest(function (api) {

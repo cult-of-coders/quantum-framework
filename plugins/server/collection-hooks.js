@@ -5,7 +5,9 @@ let plugin = class extends Quantum.Model.Plugin {
 
         _.each(config, (hooks, context) => {
             _.each(hooks, (handler, when) => {
-                collection[context][when](handler);
+                if (typeof(handler) === 'function') {
+                    collection[context][when](handler);
+                }
 
                 collection[context][when]((userId, doc) => {
                     let eventObject = {
@@ -13,7 +15,7 @@ let plugin = class extends Quantum.Model.Plugin {
                         userId: doc
                     };
 
-                    Q.emit(`${atom.name}.${context}.${when}`, eventObject);
+                    QF.emit(`${atom.name}.${context}.${when}`, eventObject);
                 });
             })
         });

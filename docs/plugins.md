@@ -153,11 +153,11 @@ Collection Hooks Plugin
 ============================
 
 ```
-Q('collection-hooks name', {
+Q('collection-hooks collectionName', {
     before: : {
-        insert:
-        update:
-        remove: 
+        insert: function() {...}
+        update: 1
+        remove: 1
     }
     after: {
         insert:
@@ -167,14 +167,18 @@ Q('collection-hooks name', {
 });
 ```
 
-It will automatically emit events:
-"name.before.insert" passing the a simple eventObject hash containing userId and doc.
+All fields are optional. If you just want to use the events from any of them just pass true or any value excepting a function.
+
+Events are like this:
+"collectionName.before.insert" passing the a simple eventObject:
+- userId - Who did the action
+- doc - The current state of the document being filtered and updated.
 
 You can easily listen to this events:
 For example you may want to send an email after a post is inserted.
 
 ```
-QF.on('post.after.insert', function (event) { ... });
+QF.on('post.after.insert', function (event) { sendEmailTo(event.userId, {post: event.doc});
 ```
 
 Collection Exposure Plugin
@@ -207,6 +211,8 @@ Q('collection-exposure collectionName', {
 ```
 
 You can use collection.secureFilters(userId, filters, options) and it will use the same exposure methods.
+You might use this collection as a child composition in another exposure. So if you want auto filter securing,
+just use findSecure instead of find.
 
 Collection Plugin
 =========================

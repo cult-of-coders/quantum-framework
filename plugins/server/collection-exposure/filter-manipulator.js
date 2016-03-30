@@ -33,13 +33,32 @@ Quantum.Model.FilterManipulation = class {
      * @param filters
      */
     applyFiltersByRoles(userId, filters) {
-        _.each(this.filtersByRoles, (actualFilters, roleName) => {
-            if (Quantum.Roles.has(roleName)) {
-                _.extend(filters, actualFilters);
+        if (!this.filtersByRoles) {
+            return;
+        }
 
+        let foundEvent = class {
+        };
+        try {
+            if (this.filtersByRoles.length === 0) {
+                return; // he hasn't setup any filters, otherwise it means we block everyone from a publication which makes no sense.
+            }
+
+            _.each(this.filtersByRoles, (actualFilters, roleName) => {
+                if (Quantum.Roles.has(roleName)) { // the first role it found it applies filters so make sure you put it in a hierarchy.
+                    _.extend(filters, actualFilters);
+                    throw foundEvent;
+                }
+            });
+        } catch (e) {
+            if (e instanceof foundEvent) {
                 return true;
             }
-        });
+
+            throw e;
+        }
+
+        // In case no role has been actually found we automatically throw an exception because something is definitely breached.
 
         throw 'We could not find any matching role';
     }
@@ -50,10 +69,25 @@ Quantum.Model.FilterManipulation = class {
      * @param options
      */
     filterFieldsByRoles(userId, options) {
-        _.each(this.fieldsByRoles, (fields, roleName) => {
-            if (Quantum.Roles.has(roleName)) {
-                options.fields = fields
+        if (!this.fieldsByRoles) {
+            return;
+        }
+
+        let foundEvent = class {
+        };
+        try {
+            _.each(this.fieldsByRoles, (fields, roleName) => {
+                if (Quantum.Roles.has(roleName)) {
+                    options.fields = fields;
+                    throw foundEvent;
+                }
+            })
+        } catch (e) {
+            if (e instanceof foundEvent) {
+                return;
             }
-        })
+
+            throw e;
+        }
     }
-}
+};

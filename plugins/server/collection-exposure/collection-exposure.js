@@ -8,6 +8,12 @@ var plugin = class extends Quantum.Model.Plugin {
             filterManipulator.apply(userId, filters, options);
         };
 
+        collection.findSecure = (userId, filters = {}, options = {}) => {
+            collection.secureFilters(userId, filters, options);
+
+            return collection.find(filters, options);
+        };
+
         Meteor.publishComposite(atom.name, (filters = {}, options = {}) => {
             filterManipulator.apply(this.userId, filters, options);
 

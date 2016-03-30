@@ -73,10 +73,18 @@ Out-of-the-box plugins
 
 Read more about the available plugins in doc/plugins.md
 
-Creating a ToDo List app that uses all these plugins
--------------------------------
+Creating a ToDo List app that taps into the power of Quantum Framework
+==========================================
+
+0. In meteor/packages file add:
+---------------------------------
+```
+cultofcoders:quantum-framework
+cultofcoders:quantum-iron-routing
+```
 
 1. Creating the schema for your todos
+----------------------------------
 
 ```
 // lib/schema.js
@@ -87,6 +95,7 @@ Q('schema todo', {
 ```
 
 2. Create the collection (client and server-side)
+-----------------------
 ```
 // lib/collection.js
 Q('collection todo', {
@@ -96,19 +105,23 @@ Q('collection todo', {
 ```
 
 3. Expose the collection (server-side)
+-------------
 ```
 // server/collection.js
 Q('collection-expose todo', {})
 ```
 
 4. Expose methods for manipulating the todo
+------------
 ```
 // server/collection.js
 Q('collection-methods todo', {})
 // will expose "todo.insert", "todo.update", "todo.remove" that works built-in with autoform.
 ```
 
-5. Create the ToDo List
+5. Create the ToDo List Templates
+-------------------------------------
+
 ```
 // client/todo.html
 <template name="ToDoList">

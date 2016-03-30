@@ -7,11 +7,13 @@ to code fast and organized solving most of the common problems in meteor:
 - Collection Security
 - Easy-to-create paginated lists with optimized subscriptions
 - Global Event Manager
-- Plugin Support
-- 
-
+- Plugin Support (Ability to extend existing plugins)
+- Easy method creation for CRUD operations with role specifications, you can even create simple methods.
+- Global User Role Manager
+- Decouple units of logic into services, easy and global access integration.
 
 Concepts
+-----------------------
 
 - Plugins
 - Atoms
@@ -62,7 +64,9 @@ QF.emit('eventName', data);
 QF.off('eventName', function () { ... });
 QF.once('eventName', function () { ... });
 
-
+You can eventify your objects by running: Quantum.Model.Utils.eventify(object)
+In a constructor of your class you can use *this* instead of *object*
+And it will expose the *on, emit, off, once* methods
 
 Out-of-the-box plugins
 -------------------------------
@@ -75,6 +79,7 @@ Creating a ToDo List app that uses all these plugins
 1. Creating the schema for your todos
 
 ```
+// lib/schema.js
 Q('schema todo', {
     title: { type: String }
     isChecked: { type: Boolean }
@@ -83,6 +88,7 @@ Q('schema todo', {
 
 2. Create the collection (client and server-side)
 ```
+// lib/collection.js
 Q('collection todo', {
     table: 'todos',
     schema: 'todo'
@@ -91,46 +97,79 @@ Q('collection todo', {
 
 3. Expose the collection (server-side)
 ```
+// server/collection.js
 Q('collection-expose todo', {})
 ```
 
 4. Expose methods for manipulating the todo
 ```
+// server/collection.js
 Q('collection-methods todo', {})
+// will expose "todo.insert", "todo.update", "todo.remove" that works built-in with autoform.
 ```
 
 5. Create the ToDo List
 ```
+// client/todo.html
 <template name="ToDoList">
+    {{> ToDoForm }}
+    
     {{# each todos }}
         {{> ToDoItem }}
+        <br />
+    {{ else }}
+        No todos yet!
     {{/ each }}
+    
+    {{> QuantumPaginator todos }}
 </template>
+
 <template name="ToDoItem">
-    <div {{b 'if: editMode' }}>
-        <input type="checkbox" checked="{{ isChecked }}" /> {{ title }}
-        
-        <a {{b 'click: remove' }}>Remove</a>
-        <a {{b 'click: edit' }}>Edit</a>
+    <div>
+        <input type="checkbox" checked="{{ isChecked }}" /> 
+        {{ title }}
+        <a class="remove">Remove</a>
     </div>
 </template>
+
 <template name="ToDoForm">
-    {{> quickForm ... }}
+    {{> quickForm formHelper }}
 </template>
 ```
 
 ```
-Q('template-listify ToDoList', {itemsVariable: 'todos', collection: 'todo', itemsPerPage: 5 })
-
-Q('viewmodel ToDoItem', {
-    remove: {
-        Meteor.call('todo.remove', this.id());
-    }
-    edit: {
-        this.editMode
-    }
+//client/todo.js
+Q('template-listify ToDoList', {
+    itemsVariable: 'todos', 
+    collection: 'todo', 
+    itemsPerPage: 5
 })
+
+Q('template ToDoItem', {
+    events: {
+        'click .remove': () => {
+            Meteor.call('todo.remove', data('_id'));
+        },
+        'click [type="checkbox"]': () => {
+            Meteor.call('todo.update', {
+                $set: { isChecked: !data('isChecked') }
+            }, data('_id'));
+
+            data('isChecked', !data('isChecked'));
+        }
+    }
+});
+
+Q('template-formify ToDoForm', {
+    methodsPrefix: 'todo', // used by collection-methods, or you can define them custom "todo.insert", "todo.update"
+    formId: 'todo',
+    schema: 'todo',
+    events: {
+        onSuccess: () => {} // optional events used by autoform.
+    }
+});
 ```
+
 
 
 

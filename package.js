@@ -22,7 +22,8 @@ Package.onUse(function (api) {
         'matb33:collection-hooks@0.8.1',
         'reywood:publish-composite@1.4.2',
         'aldeed:collection2@2.9.1',
-        'dburles:collection-helpers@1.0.4'
+        'dburles:collection-helpers@1.0.4',
+        'momentjs:moment@2.12.0'
     ];
 
     api.use(packages);
@@ -38,6 +39,7 @@ Package.onUse(function (api) {
 
 
     api.addFiles([
+        'plugins/server/method.js',
         'plugins/server/collection-methods.js',
         'plugins/server/collection-security.js',
         'plugins/server/collection-hooks.js',
@@ -70,6 +72,8 @@ Package.onUse(function (api) {
     ], 'client');
 
     api.addFiles('boot.js');
+
+    api.export(['tpl', 'data'])
 });
 
 Package.onTest(function (api) {

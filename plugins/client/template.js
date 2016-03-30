@@ -15,6 +15,8 @@ var plugin = class extends Quantum.Model.Plugin {
         if (config.onRendered) {
             Template[templateName].onRendered(config.onRendered);
         }
+
+        Quantum.Model.Utils.eventify(Template[templateName]);
     }
 
     schema() {

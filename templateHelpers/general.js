@@ -1,17 +1,53 @@
+/**
+ * Returns template instance.
+ *
+ * @returns {Blaze.TemplateInstance}
+ */
 tpl = function() {
     return Template.instance()
 };
 
-tpl_data = function() {
-    return Template.instance().data || {};
+/**
+ * Set get store data from a hash.
+ *
+ * @param keyOrObject
+ * @param optionalValue
+ * @returns {*}
+ */
+data = function(keyOrObject, optionalValue) {
+    if (!tpl()._reactiveData) {
+        tpl()._reactiveData = new ReactiveVar(Template.instance().data || {})
+    }
+
+    let _data = tpl()._reactiveData.get();
+
+    // wants to get the whole data
+    if (keyOrObject === undefined) {
+        return _data;
+    }
+
+    // wants to set the whole data
+    if (typeof(keyOrObject) === 'object') {
+        tpl()._reactiveData.set(keyOrObject);
+    }
+
+    // wants to get a key
+    if (optionalValue === undefined) {
+        return _data[keyOrObject];
+    }
+
+    // wants to set the key
+    _data[keyOrObject] = optionalValue;
+    tpl()._reactiveData.set(_data);
 };
 
-Template.registerHelper('_tpl', function () {
+
+Template.registerHelper('tpl', function () {
     return tpl();
 });
 
-Template.registerHelper('_data', function () {
-    return tpl_data();
+Template.registerHelper('data', function (...args) {
+    return data(...args);
 });
 
 Template.registerHelper('selectize', function(object) {

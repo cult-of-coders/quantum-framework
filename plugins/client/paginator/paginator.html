@@ -1,0 +1,21 @@
+<template name="QuantumPaginator">
+    {{#if showUI}}
+        <ul class="pagination">
+            <li class="{{#if isCurrentPageFirst}}disabled{{/if}} paginator-prev waves-effect">
+                <a href="">
+                    Previous
+                </a>
+            </li>
+            <li class="">
+                <a href="">
+                    {{ currentPage }} of {{ totalPages }}
+                </a>
+            </li>
+            <li class="{{#if isCurrentPageLast}}disabled{{/if}} paginator-next waves-effect">
+                <a href="">
+                    Next
+                </a>
+            </li>
+        </ul>
+    {{/if}}
+</template>

@@ -212,6 +212,8 @@ Q('collection-exposure collectionName', {
         ]
     }
 })
+
+Meteor.susbcribe(subriptionName, {filters: ...}})
 ```
 
 You can use collection.secureFilters(userId, filters, options) and it will use the same exposure methods.
@@ -224,10 +226,19 @@ Collection Plugin
 Q('schema schema', { ... })
 
 Q('collection name', {
-    table: 'posts',
-    helpers: ''
+    mongo: 'posts',
+    model: {
+        toString(): { return this.name + ' ' + this._id  }
+    }
+    extend: {
+        findActivePosts: () => { return this.find({status: 'active'}); }
+    }
     schema: schemaName
 })
+
+The model you specify will expose those methods on every document retrieved via collection.
+
+The extend argument allows you to extend the functionality of the collection object.
 
 Method Plugin
 =========================
@@ -241,3 +252,24 @@ Q('method my.method.name', {
 
 
 // call it using Meteor.call(my.method.name)
+
+
+Notifications
+========================
+
+Q('notifications', {
+    smtp_url: '',
+    layoutTemplate: ''
+    defaultFrom: '...'
+    defaultTo: '...' // false if not in dev mode.
+}) 
+
+Q('notifications templateName', {
+    assetPath: '...'
+    schema() {  }
+})
+
+Q('notifications templateName').sendEmail(
+    {to: 'xxx', bcc: [], cc: [], attachments: []}, 
+    post
+)

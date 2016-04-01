@@ -44,7 +44,8 @@ Package.onUse(function (api) {
         'plugins/server/collection-security.js',
         'plugins/server/collection-hooks.js',
         'plugins/server/collection-exposure/filter-manipulator.js',
-        'plugins/server/collection-exposure/collection-exposure.js'
+        'plugins/server/collection-exposure/collection-exposure.js',
+        'plugins/server/a.html'
     ], 'server');
 
     api.addFiles([
@@ -73,7 +74,7 @@ Package.onUse(function (api) {
 
     api.addFiles('boot.js');
 
-    api.export(['tpl', 'data', 'form'], 'client');
+    api.export(['tpl', 'tplData', 'data', 'form'], 'client');
 });
 
 Package.onTest(function (api) {

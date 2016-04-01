@@ -10,16 +10,17 @@ tpl = function() {
 /**
  * Set get store data from a hash.
  *
+ * @param templateInstance
  * @param keyOrObject
  * @param optionalValue
  * @returns {*}
  */
-data = function(keyOrObject, optionalValue) {
-    if (!tpl()._reactiveData) {
-        tpl()._reactiveData = new ReactiveVar(Template.instance().data || {})
+tplData = function(templateInstance, keyOrObject, optionalValue) {
+    if (!templateInstance._reactiveData) {
+        templateInstance._reactiveData = new ReactiveVar(templateInstance.data || {})
     }
 
-    let _data = tpl()._reactiveData.get();
+    let _data = templateInstance._reactiveData.get();
 
     // wants to get the whole data
     if (keyOrObject === undefined) {
@@ -28,7 +29,7 @@ data = function(keyOrObject, optionalValue) {
 
     // wants to set the whole data
     if (typeof(keyOrObject) === 'object') {
-        tpl()._reactiveData.set(keyOrObject);
+        templateInstance._reactiveData.set(keyOrObject);
     }
 
     // wants to get a key
@@ -38,9 +39,24 @@ data = function(keyOrObject, optionalValue) {
 
     // wants to set the key
     _data[keyOrObject] = optionalValue;
-    tpl()._reactiveData.set(_data);
+    templateInstance._reactiveData.set(_data);
 };
 
+/**
+ *
+ * @param keyOrObject
+ * @param optionalValue
+ */
+data = function(keyOrObject, optionalValue) {
+    tplData(tpl(), keyOrObject, optionalValue);
+};
+
+/**
+ *
+ * @param key
+ * @param formId
+ * @returns {*}
+ */
 form = function (key, formId) {
     let value = AutoForm.getFieldValue(key);
 

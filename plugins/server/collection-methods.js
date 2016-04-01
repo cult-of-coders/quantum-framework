@@ -2,6 +2,9 @@
 let plugin = class extends Quantum.Model.Plugin {
     build(atom) {
         let config = atom.config;
+
+        if (!config.prefix) config.prefix = atom.name;
+
         let prefix = config.prefix;
         let methods = {};
 
@@ -13,7 +16,7 @@ let plugin = class extends Quantum.Model.Plugin {
             }
         };
 
-        if (config.insert) {
+        if (config.insert === undefined || config.insert) {
             methods[`${prefix}.insert`] = function (data) {
                 checkRoles(this.userId);
 
@@ -21,7 +24,7 @@ let plugin = class extends Quantum.Model.Plugin {
             }
         }
 
-        if (config.update) {
+        if (config.update === undefined || config.update) {
             methods[`${prefix}.update`] = function (modifier, _id) {
                 checkRoles(this.userId);
 
@@ -29,7 +32,15 @@ let plugin = class extends Quantum.Model.Plugin {
             }
         }
 
-        if (config.remove) {
+        if (config.update_simple === undefined || config.update_simple) {
+            methods[`${prefix}.update_simple`] = function (_id, values) {
+                checkRoles(this.userId);
+
+                return collection.update(_id, {$set: values});
+            }
+        }
+
+        if (config.remove === undefined || config.remove) {
             methods[`${prefix}.remove`] = function (_id) {
                 checkRoles(this.userId);
 
@@ -43,7 +54,8 @@ let plugin = class extends Quantum.Model.Plugin {
     schema() {
         return {
             prefix: {
-                type: String
+                type: String,
+                optional: true
             },
             allowedRoles: {
                 type: [String],
@@ -52,15 +64,19 @@ let plugin = class extends Quantum.Model.Plugin {
             },
             insert: {
                 type: Boolean,
-                defaultValue: true
+                optional: true
             },
             update: {
                 type: Boolean,
-                defaultValue: true
+                optional: true
+            },
+            update_simple: {
+                type: Boolean,
+                optional: true
             },
             remove: {
                 type: Boolean,
-                defaultValue: true
+                optional: true
             }
         }
     }

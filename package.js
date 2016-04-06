@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '0.0.1',
+    version: '1.0.0',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'

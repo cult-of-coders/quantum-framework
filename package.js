@@ -10,6 +10,18 @@ Package.onUse(function (api) {
     api.versionsFrom('1.2.1');
 
     var packages = [
+        'meteor-base',
+        'mobile-experience',
+        'mongo',
+        'templating',
+        'blaze-html-templates',
+        'session',
+        'jquery',
+        'tracker',
+        'check',
+        'reactive-var',
+        'standard-minifiers',
+        'es5-shim',
         'coffeescript',
         'ecmascript',
         'cultofcoders:quantum-core@1.0.0',

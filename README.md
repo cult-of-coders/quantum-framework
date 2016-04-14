@@ -108,7 +108,7 @@ Q('collection todo', {
 -------------
 ```
 // server/collection.js
-Q('collection-expose todo', {})
+Q('collection-exposure todo', {})
 ```
 
 4. Expose methods for manipulating the todo

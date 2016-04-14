@@ -226,9 +226,8 @@ Collection Plugin
 Q('schema schema', { ... })
 
 Q('collection name', {
-    mongo: 'posts',
     model: {
-        toString(): { return this.name + ' ' + this._id  }
+        toString() { return this.name + ' ' + this._id  }
     }
     extend: {
         findActivePosts: () => { return this.find({status: 'active'}); }

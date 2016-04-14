@@ -1,7 +1,7 @@
 var plugin = class extends Quantum.Model.Plugin {
     build(atom) {
         let config = atom.config;
-        let collection = new Mongo.Collection(config.mongo);
+        let collection = new Mongo.Collection(atom.name);
 
         if (config.model) {
             collection.helpers(config.model)
@@ -21,9 +21,6 @@ var plugin = class extends Quantum.Model.Plugin {
 
     schema() {
         return {
-            'mongo': {
-                type: String
-            },
             'extend': {
                 type: Object,
                 optional: true,

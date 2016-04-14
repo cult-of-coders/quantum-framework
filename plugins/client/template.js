@@ -40,6 +40,10 @@ var plugin = class extends Quantum.Model.Plugin {
             'onRendered': {
                 type: Function,
                 optional: true
+            },
+            'onDestroyed': {
+                type: Function,
+                optional: true
             }
         }
     }

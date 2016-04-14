@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.0',
+    version: '1.0.2',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -45,7 +45,6 @@ Package.onUse(function (api) {
         'plugins/server/collection-hooks.js',
         'plugins/server/collection-exposure/filter-manipulator.js',
         'plugins/server/collection-exposure/collection-exposure.js',
-        'plugins/server/a.html'
     ], 'server');
 
     api.addFiles([

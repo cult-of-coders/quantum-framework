@@ -24,6 +24,7 @@ Package.onUse(function (api) {
         'es5-shim',
         'coffeescript',
         'ecmascript',
+        'accounts',
         'cultofcoders:quantum-core@1.0.0',
         'manuel:viewmodel@4.0.6',
         'aldeed:autoform@5.8.1',

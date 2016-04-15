@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.3',
+    version: '1.0.4',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -25,7 +25,7 @@ Package.onUse(function (api) {
         'coffeescript',
         'ecmascript',
         'accounts-base',
-        'cultofcoders:quantum-core@1.0.0',
+        'cultofcoders:quantum-core@1.0.1',
         'manuel:viewmodel@4.0.6',
         'aldeed:autoform@5.8.1',
         'alanning:roles@1.2.15',

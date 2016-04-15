@@ -12,8 +12,9 @@ let plugin = class extends Quantum.Model.Plugin {
 
         methods[atom.name] = (...args) => {
             checkRoles(this.userId);
-            let run = config.handler.bind(this)
-            run(...args);
+            let run = config.handler.bind(this);
+
+            return run(...args);
         };
 
         Meteor.methods(methods)

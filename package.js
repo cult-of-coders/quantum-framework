@@ -34,6 +34,7 @@ Package.onUse(function (api) {
         'matb33:collection-hooks@0.8.1',
         'reywood:publish-composite@1.4.2',
         'aldeed:collection2@2.9.1',
+        'aldeed:simple-schema@1.5.3',
         'dburles:collection-helpers@1.0.4',
         'momentjs:moment@2.12.0'
     ];

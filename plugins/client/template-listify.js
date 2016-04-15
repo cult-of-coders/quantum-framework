@@ -66,7 +66,7 @@ let plugin = class extends Quantum.Model.Plugin {
     }
 
     executionContext() {
-        return 'boot';
+        return 'instant';
     }
 };
 

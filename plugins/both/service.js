@@ -37,7 +37,8 @@ let plugin = class extends Quantum.Model.Plugin {
             },
             'factory': {
                 type: Boolean,
-                defaultValue: false
+                defaultValue: false,
+                optional: true
             }
         }
     }

@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.8',
+    version: '1.0.9',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -30,7 +30,6 @@ Package.onUse(function (api) {
         'aldeed:autoform@5.8.1',
         'alanning:roles@1.2.15',
         'raix:handlebar-helpers@0.2.5',
-        'aldeed:template-extension@4.0.0',
         'yasaricli:slugify@0.0.7',
         'matb33:collection-hooks@0.8.1',
         'reywood:publish-composite@1.4.2',
@@ -80,9 +79,7 @@ Package.onUse(function (api) {
 
     api.addFiles([
         'templateHelpers/roles.js',
-        'templateHelpers/general.js',
-        'views/include.html',
-        'views/include.js'
+        'templateHelpers/general.js'
     ], 'client');
 
     api.addFiles('boot.js');

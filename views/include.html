@@ -1,9 +1,0 @@
-<template name="include">
-    {{checkContext}}
-    {{#if dataContextPresent}}
-        {{# __dynamicWithDataContext}}{{> Template.contentBlock}}{{/__dynamicWithDataContext}}
-    {{else}}
-    {{! if there was no explicit 'data' argument, use the parent context}}
-        {{# __dynamicWithDataContext template=template data=..}}{{> Template.contentBlock}}{{/__dynamicWithDataContext}}
-    {{/if}}
-</template>

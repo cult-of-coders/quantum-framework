@@ -1,11 +1,6 @@
 Quantum UI
 =================================
 
-Renamed UI.dynamic to a friendlier name:
-```
-{{> include template='package.my_template' data=optionalDataOrGetsTheParentOne }}
-```
-
 Global helpers:
 ```
 {{ tpl }}

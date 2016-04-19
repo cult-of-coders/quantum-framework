@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.11',
+    version: '1.0.12',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -69,6 +69,7 @@ Package.onUse(function (api) {
         'plugins/client/paginator/paginator.html',
         'plugins/client/paginator/paginator.coffee',
         'plugins/client/template-listify.js',
+        'plugins/client/template-crudify.js',
         'plugins/client/template-formify.js'
     ], 'client');
 

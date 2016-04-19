@@ -4,13 +4,13 @@ let plugin = class extends Quantum.Model.Plugin {
 
         let checkRoles = function (userId) {
             if (config.allowedRoles && config.allowedRoles.length) {
-                Quantum.Roles.check(this.userId, config.allowedRoles);
+                Quantum.Roles.check(userId, config.allowedRoles);
             }
         };
 
         let methods = {};
 
-        methods[atom.name] = (...args) => {
+        methods[atom.name] = function(...args) {
             checkRoles(this.userId);
             let run = config.handler.bind(this);
 

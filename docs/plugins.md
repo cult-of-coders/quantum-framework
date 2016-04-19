@@ -115,6 +115,29 @@ Q('template-formify TemplateName', {
 {{> quickForm (formHelper doc) }}
 ```
 
+Template Crudify
+=======================
+
+Crudify uses Formify and Listify for complete integration but it can work without it.
+```
+Q('template-crudify ToDoCrud', { // ToDoCrud is the prefix for templates: ToDoCrudList, ToDoCrudEdit, ToDoCrudCreate
+    collection: 'todo',
+    routing: ['todo_crud', '/todo-crud'], // [routeNamePrefix, routePathPrefix]
+    listify: { 
+        itemsVariable: 'todos', // default: items
+        itemsPerPage: 3, // default
+    },
+    formify: { // (optional) you can use your own form. 
+        methodsPrefix: 'todo',
+        formId: 'todo.form',
+        schema: 'todo'
+    },
+    list: true //(optional)
+    edit: true //(optional) It will create the route /routePathPrefix/:_id/
+    create: true //(optional)
+});
+```
+
 DataStore Plugin
 ========================================
 

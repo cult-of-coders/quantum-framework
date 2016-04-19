@@ -33,6 +33,10 @@ let plugin = class extends Quantum.Model.Plugin {
             return tpl._paginator.find(tpl._list_filters.get(), tpl._list_options.get());
         };
 
+        if (!Template[atom.name]) {
+            throw `Template with name ${atom.name} does not exist. Please add it before this loads.`
+        }
+
         Template[atom.name].helpers(helpers);
         Template[atom.name].onCreated(onCreated);
     }
@@ -70,4 +74,7 @@ let plugin = class extends Quantum.Model.Plugin {
     }
 };
 
+
 Quantum.instance.plugin('template-listify', plugin);
+
+

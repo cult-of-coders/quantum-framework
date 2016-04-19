@@ -6,9 +6,11 @@ let helperClass = class {
     update(doc) {
         let config = this._config;
 
+        this.doc = doc;
         this.id = config.formId;
         this.schema = Quantum.instance.use('schema', this._config.schema);
         this.type = (this.doc && this.doc._id) ? 'method-update' : 'method';
+
         let methodSuffix = (this.doc && this.doc._id) ? 'update' : 'insert';
         this.meteormethod = `${this._config.methodsPrefix}.${methodSuffix}`;
     }

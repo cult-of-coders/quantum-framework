@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.9',
+    version: '1.0.10',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -25,7 +25,7 @@ Package.onUse(function (api) {
         'coffeescript',
         'ecmascript',
         'accounts-base',
-        'cultofcoders:quantum-core@1.0.2',
+        'cultofcoders:quantum-core@1.0.3',
         'manuel:viewmodel@4.0.6',
         'aldeed:autoform@5.8.1',
         'alanning:roles@1.2.15',
@@ -69,7 +69,8 @@ Package.onUse(function (api) {
         'plugins/client/paginator/paginator.html',
         'plugins/client/paginator/paginator.coffee',
         'plugins/client/template-listify.js',
-        'plugins/client/template-formify.js'
+        'plugins/client/template-formify.js',
+        'plugins/client/template-crudify.js'
     ], 'client');
 
     // others

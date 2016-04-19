@@ -203,14 +203,12 @@ Q('collection-exposure collectionName', {
         'ADMIN': {},
         'USER': {this: 1, that: 1},
     }
-    composition: {
-        children: [
-            {
-                find: ...
-                children: ....
-            }
-        ]
-    }
+    composition: [
+        {
+            find: ...
+            children: ....
+        }
+    ]
 })
 
 Meteor.susbcribe(subriptionName, {filters: ...}})

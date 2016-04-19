@@ -23,7 +23,7 @@ var plugin = class extends Quantum.Model.Plugin {
             };
 
             if (config.composition) {
-                returnable.children = composition;
+                returnable.children = config.composition;
             }
 
             return returnable;

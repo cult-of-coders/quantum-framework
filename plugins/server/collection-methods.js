@@ -2,13 +2,17 @@
 let plugin = class extends Quantum.Model.Plugin {
     build(atom) {
         let config = atom.config;
-
         if (!config.prefix) config.prefix = atom.name;
 
         let prefix = config.prefix;
-        let methods = {};
-
         let collection = Quantum.instance.use('collection', atom.name);
+
+        let firewall = function (bindContext, context, ...args) {
+            if (config.firewall) {
+                let run = config.firewall.bind(bindContext);
+                run(context, ...args)
+            }
+        };
 
         let checkRoles = function (userId) {
             if (config.allowedRoles && config.allowedRoles.length) {
@@ -16,8 +20,10 @@ let plugin = class extends Quantum.Model.Plugin {
             }
         };
 
+        let methods = {};
         if (config.insert === undefined || config.insert) {
             methods[`${prefix}.insert`] = function (data) {
+                firewall(this, 'insert', data);
                 checkRoles(this.userId);
 
                 return collection.insert(data);
@@ -27,6 +33,7 @@ let plugin = class extends Quantum.Model.Plugin {
         if (config.update === undefined || config.update) {
             methods[`${prefix}.update`] = function (modifier, _id) {
                 checkRoles(this.userId);
+                firewall(this, 'update', collection.findOne(_id), modifier);
 
                 return collection.update(_id, modifier);
             }
@@ -35,6 +42,7 @@ let plugin = class extends Quantum.Model.Plugin {
         if (config.update_simple === undefined || config.update_simple) {
             methods[`${prefix}.update_simple`] = function (_id, values) {
                 checkRoles(this.userId);
+                firewall(this, 'update_simple', _id, {$set: values});
 
                 return collection.update(_id, {$set: values});
             }
@@ -43,6 +51,7 @@ let plugin = class extends Quantum.Model.Plugin {
         if (config.remove === undefined || config.remove) {
             methods[`${prefix}.remove`] = function (_id) {
                 checkRoles(this.userId);
+                firewall(this, 'remove', collection.findOne(_id));
 
                 return collection.remove(_id);
             }
@@ -53,6 +62,10 @@ let plugin = class extends Quantum.Model.Plugin {
 
     schema() {
         return {
+            firewall: {
+                type: Function,
+                optional: true
+            },
             prefix: {
                 type: String,
                 optional: true

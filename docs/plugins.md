@@ -166,13 +166,26 @@ Q('collection-security collectionName', {
 Collection Methods Plugin
 =======================
 
+Using this will expose methods for inserting, removing and updating a collection object.
+
 ```
 Q('collection-methods name', {
-    prefix: '' # default collection name
-    allowedRoles: []
-    insert: true
-    remove: true
-    update: true
+    prefix: 'name' # default collection name
+    allowedRoles: [],
+    insert: true, // Meteor.call('name.insert') will return the id of inserted document.
+    remove: true, // Meteor.call('name.remove', _id)
+    update: true, // Meteor.call('name.update', modifier, _id)
+    update_simple: true // Meteor.call('name.update_simple', _id, {x: 'test'})
+    firewall: function(context, doc, modifier) { 
+        // available contexts: 'insert', 'update', 'remove', 'update_simple'
+        // modifier will only be available for update and update_simple
+        // doc won't have an id yet if the context is 'insert'
+        // you can use code  as if you were in the method (this.userId)
+        // you can restrict removing something that does not belong to a user like:
+        if (context == 'remove' &&  doc.userId != this.userId) {
+           throw 'Not Allowed'
+        }
+    }
 });
 ```
 
@@ -217,7 +230,7 @@ Q('collection-exposure collectionName', {
     filtersByRoles: {
         'ADMIN': null,
         'USER': function (userId) {
-            return {
+            return {   // no matter what filters the users specifies it will override them with these
                userId: userId
             }
         }

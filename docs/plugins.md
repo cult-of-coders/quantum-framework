@@ -123,16 +123,16 @@ Crudify uses Formify and Listify for complete integration but it can work withou
 Q('template-crudify ToDoCrud', { // ToDoCrud is the prefix for templates: ToDoCrudList, ToDoCrudEdit, ToDoCrudCreate
     collection: 'todo',
     routing: ['todo_crud', '/todo-crud'], // [routeNamePrefix, routePathPrefix]
-    listify: { 
+    listify: { // read more about it in the template-listify plugin. no need to provide collection here.
         itemsVariable: 'todos', // default: items
         itemsPerPage: 3, // default
     },
-    formify: { // (optional) you can use your own form. 
+    formify: { // (optional) you can use your own form. read more about it in the template-formify plugin.
         methodsPrefix: 'todo',
         formId: 'todo.form',
         schema: 'todo'
     },
-    list: true //(optional)
+    list: true // whether or not to have a list. (optional)
     edit: true //(optional) It will create the route /routePathPrefix/:_id/
     create: true //(optional)
 });

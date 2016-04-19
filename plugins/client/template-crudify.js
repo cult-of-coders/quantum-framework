@@ -95,6 +95,10 @@ let plugin = class extends Quantum.Model.Plugin {
             }
         }
     }
+
+    requires() {
+        return ['route']
+    }
 };
 
 QF.plugin('template-crudify', plugin);

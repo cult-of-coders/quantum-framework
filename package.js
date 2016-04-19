@@ -25,7 +25,7 @@ Package.onUse(function (api) {
         'coffeescript',
         'ecmascript',
         'accounts-base',
-        'cultofcoders:quantum-core@1.0.1',
+        'cultofcoders:quantum-core@1.0.2',
         'manuel:viewmodel@4.0.6',
         'aldeed:autoform@5.8.1',
         'alanning:roles@1.2.15',

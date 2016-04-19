@@ -69,8 +69,7 @@ Package.onUse(function (api) {
         'plugins/client/paginator/paginator.html',
         'plugins/client/paginator/paginator.coffee',
         'plugins/client/template-listify.js',
-        'plugins/client/template-formify.js',
-        'plugins/client/template-crudify.js'
+        'plugins/client/template-formify.js'
     ], 'client');
 
     // others

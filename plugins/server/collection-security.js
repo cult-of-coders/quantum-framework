@@ -20,10 +20,10 @@ var plugin = class extends Quantum.Model.Plugin {
         let config = atom.config;
 
         if (config.allow) {
-            collection.allow(firewall.allow);
+            collection.allow(config.allow);
         }
         if (config.deny) {
-            collection.deny(firewall.deny);
+            collection.deny(config.deny);
         }
     }
 

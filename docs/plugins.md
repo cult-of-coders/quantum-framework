@@ -154,14 +154,48 @@ Q('datastore business').monthlyFee
 Collection Security Plugin
 ===============================
 
-
 Q('collection-security collectionName', {
     allow: {
         insert: (userId, doc) => {}
-        update: (userId, doc) => {}
+        update: (userId, doc, fields, modifier) => {}
+        remove: (userId, doc) => {}
     }
-    deny: ...
+    deny: {
+        insert: (userId, doc) => {}
+        update: (userId, doc, fields, modifier) => {}
+        remove: (userId, doc) => {}
+    }
 })
+
+This is equivallent to:
+```
+Q('collection collectionName').allow({})
+Q('collection collectionName').deny({})
+```
+
+But the reason if it's existence is to decouple the logical concept of security and provide extensability to allow more options
+like wrapping up the allows, and inserts to certain roles:
+
+For example, you may want to listen to when an object is denied something to make a log.
+You would do something like: 
+
+```
+Q('collection-security').extend({
+    wrap: { // schema of the new config.
+        type: Boolean
+        optional: true
+    }
+}, function (atom) { // handling new config.
+    let config = atom.config;
+    if (config.allow) {
+        if (config.allow.insert) {
+            _.wrap(config.allow.insert, (func, userId, doc) => {
+                // do something, you have atom.name which can link to the collection name.
+            });
+        }
+    }
+});
+```
 
 Collection Methods Plugin
 =======================
@@ -169,15 +203,15 @@ Collection Methods Plugin
 Using this will expose methods for inserting, removing and updating a collection object.
 
 ```
-Q('collection-methods name', {
-    prefix: 'name' # default collection name
+Q('collection-methods prefixForMethods', {
+    collection: 'name' # default collection name
     allowedRoles: [],
-    insert: true, // Meteor.call('name.insert') will return the id of inserted document.
-    remove: true, // Meteor.call('name.remove', _id)
-    update: true, // Meteor.call('name.update', modifier, _id)
-    update_simple: true // Meteor.call('name.update_simple', _id, {x: 'test'})
+    insert: true, // Meteor.call('prefixForMethods.insert') will return the id of inserted document.
+    remove: true, // Meteor.call('prefixForMethods.remove', _id)
+    update: true, // Meteor.call('prefixForMethods.update', modifier, _id)
+    update_simple: true // Meteor.call('prefixForMethods.update_simple', _id, {x: 'test'})
     firewall: function(context, doc, modifier) { 
-        // available contexts: 'insert', 'update', 'remove', 'update_simple'
+        // available contexts: 'insert', 'update', 'remove' (update_simple is the same firewall as update)
         // modifier will only be available for update and update_simple
         // doc won't have an id yet if the context is 'insert'
         // you can use code  as if you were in the method (this.userId)

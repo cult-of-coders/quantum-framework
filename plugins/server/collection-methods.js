@@ -5,7 +5,7 @@ let plugin = class extends Quantum.Model.Plugin {
         if (!config.prefix) config.prefix = atom.name;
 
         let prefix = config.prefix;
-        let collection = Quantum.instance.use('collection', atom.name);
+        let collection = Quantum.instance.use('collection', config.collection);
 
         let firewall = function (bindContext, context, ...args) {
             if (config.firewall) {
@@ -23,8 +23,8 @@ let plugin = class extends Quantum.Model.Plugin {
         let methods = {};
         if (config.insert === undefined || config.insert) {
             methods[`${prefix}.insert`] = function (data) {
-                firewall(this, 'insert', data);
                 checkRoles(this.userId);
+                firewall(this, 'insert', data);
 
                 return collection.insert(data);
             }
@@ -42,7 +42,7 @@ let plugin = class extends Quantum.Model.Plugin {
         if (config.update_simple === undefined || config.update_simple) {
             methods[`${prefix}.update_simple`] = function (_id, values) {
                 checkRoles(this.userId);
-                firewall(this, 'update_simple', _id, {$set: values});
+                firewall(this, 'update', _id, {$set: values});
 
                 return collection.update(_id, {$set: values});
             }
@@ -57,7 +57,7 @@ let plugin = class extends Quantum.Model.Plugin {
             }
         }
 
-        Meteor.methods(methods)
+        Meteor.methods(methods);
     }
 
     schema() {
@@ -66,9 +66,8 @@ let plugin = class extends Quantum.Model.Plugin {
                 type: Function,
                 optional: true
             },
-            prefix: {
-                type: String,
-                optional: true
+            collection: {
+                type: String
             },
             allowedRoles: {
                 type: [String],

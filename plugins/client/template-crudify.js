@@ -72,7 +72,7 @@ let plugin = class extends Quantum.Model.Plugin {
                 type: [String]
             },
             list: {
-                type: String,
+                type: Boolean,
                 optional: true
             },
             listify: {
@@ -86,11 +86,11 @@ let plugin = class extends Quantum.Model.Plugin {
                 optional: true
             },
             create: {
-                type: String,
+                type: Boolean,
                 optional: true
             },
             edit: {
-                type: String,
+                type: Boolean,
                 optional: true
             }
         }

@@ -1,7 +1,13 @@
 var plugin = class extends Quantum.Model.Plugin {
     build(atom) {
-        let config = atom.config;
-        let collection = new Mongo.Collection(atom.name);
+        let config = atom.config,
+            collection;
+
+        if (config.existingCollection) {
+            collection = config.existingCollection;
+        } else {
+            collection = new Mongo.Collection(atom.name);
+        }
 
         if (config.model) {
             collection.helpers(config.model)
@@ -33,6 +39,10 @@ var plugin = class extends Quantum.Model.Plugin {
             },
             'schema': {
                 type: String,
+                optional: true
+            },
+            'existingCollection': {
+                type: Any,
                 optional: true
             }
         }

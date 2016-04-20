@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.13',
+    version: '1.0.14',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -10,6 +10,7 @@ Package.onUse(function (api) {
     api.versionsFrom('1.2.1');
 
     var packages = [
+        'cultofcoders:quantum-core@1.0.4',
         'meteor-base',
         'mobile-experience',
         'mongo',
@@ -25,7 +26,6 @@ Package.onUse(function (api) {
         'coffeescript',
         'ecmascript',
         'accounts-base',
-        'cultofcoders:quantum-core@1.0.3',
         'manuel:viewmodel@4.0.6',
         'aldeed:autoform@5.8.1',
         'alanning:roles@1.2.15',
@@ -42,12 +42,18 @@ Package.onUse(function (api) {
     api.use(packages);
     api.imply(packages);
 
+    // others
+    api.addFiles([
+        'lib/roles.js'
+    ]);
+
     // plugins
     api.addFiles([
         'plugins/both/datastore.js',
         'plugins/both/schema.js',
         'plugins/both/service.js',
-        'plugins/both/collection.js'
+        'plugins/both/collection.js',
+        'plugins/both/user.js'
     ]);
 
 
@@ -73,11 +79,6 @@ Package.onUse(function (api) {
         'plugins/client/template-formify.js'
     ], 'client');
 
-    // others
-    api.addFiles([
-        'lib/roles.js'
-    ]);
-
     api.addFiles([
         'templateHelpers/roles.js',
         'templateHelpers/general.js'
@@ -86,6 +87,7 @@ Package.onUse(function (api) {
     api.addFiles('boot.js');
 
     api.export(['tpl', 'tplData', 'data', 'form'], 'client');
+    api.export(['Any']); // used by schema
 });
 
 Package.onTest(function (api) {

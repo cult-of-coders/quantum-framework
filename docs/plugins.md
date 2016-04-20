@@ -189,6 +189,38 @@ Q('collection-methods name', {
 });
 ```
 
+User Plugin
+==========================
+First make sure you have already loaded a user schema.
+We recommend this:
+
+```
+Q('schema user', _.extend(Q('user').defaultUserSchema(), {
+   others: {type: String} 
+}));
+```
+
+The *defaultUserSchema* already has the default Meteor users variable including profile.
+We suggest that you store additional information in profile, this way you don't have to extend it.
+
+```
+Q('schema user', Q('user').defaultUserSchema());
+```
+
+Since plugins are polymorphic, they can act as modules and factories. In this case it can be viewed as a module since
+we don't use it to create atoms.
+
+```
+Q('user', {
+    collection: { // (optional) see collection plugin, automatically updates 'schema' and 'collection' name to 'user'
+        model: {} // for extending the Meteor.user object
+        extend: {} // for extending Meteor.users
+    } // it will create a 'user' collection that you can use: Q('collection user')
+    roleHierarchy: { // (optional) read more about quantum roles in roles.md
+        'ADMIN': ['MODERATOR'] // this way you can only check for MODERATOR role, and if it's an ADMIN it will be true
+    }
+})
+```
 Collection Hooks Plugin
 ============================
 
@@ -257,17 +289,24 @@ just use findSecure instead of find.
 Collection Plugin
 =========================
 
-Q('schema schema', { ... })
+```
+Q('schema schemaName', { ... })
 
 Q('collection name', {
     model: {
-        toString() { return this.name + ' ' + this._id  }
-    }
+        fullname() { 
+            return this.profile.firstName + ' ' + this.profile.lastName  
+        }
+    },
     extend: {
-        findActivePosts: () => { return this.find({status: 'active'}); }
-    }
-    schema: schemaName
+        findActivePosts() { 
+            return this.find({status: 'active'}); 
+        }
+    },
+    schema: schemaName,
+    existingCollection: Meteor.users // optional
 })
+```
 
 The model you specify will expose those methods on every document retrieved via collection.
 

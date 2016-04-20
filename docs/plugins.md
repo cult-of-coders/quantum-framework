@@ -189,8 +189,10 @@ Q('collection-security').extend({
     let config = atom.config;
     if (config.allow) {
         if (config.allow.insert) {
-            _.wrap(config.allow.insert, (func, userId, doc) => {
-                // do something, you have atom.name which can link to the collection name.
+            config.allow.insert = _.wrap(config.allow.insert, (func, userId, doc) => {
+                if (!func(userId, doc)) {
+                    // do something, you have atom.name which can link to the collection name.
+                }
             });
         }
     }

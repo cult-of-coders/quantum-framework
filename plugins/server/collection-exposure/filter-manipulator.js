@@ -37,17 +37,26 @@ Quantum.Model.FilterManipulation = class {
             return;
         }
 
-        let foundEvent = class {
-        };
+        let foundEvent = class {};
         try {
             if (this.filtersByRoles.length === 0) {
                 return; // he hasn't setup any filters, otherwise it means we block everyone from a publication which makes no sense.
             }
 
             _.each(this.filtersByRoles, (actualFilters, roleName) => {
-                if (Quantum.Roles.has(roleName)) { // the first role it found it applies filters so make sure you put it in a hierarchy.
-                    _.extend(filters, actualFilters);
-                    throw foundEvent;
+                var processedFilters;
+                if (typeof actualFilters === 'function') {
+                    processedFilters = actualFilters(userId);
+                    if (!processedFilters) {
+                        throw 'Your filter function did not return anything. Did you forget something ?'
+                    }
+                } else {
+                    processedFilters = actualFilters;
+                }
+
+                if (Quantum.Roles.has(userId, roleName)) { // the first role it found it applies filters so make sure you put it in a hierarchy.
+                    _.extend(filters, processedFilters);
+                    throw new foundEvent;
                 }
             });
         } catch (e) {

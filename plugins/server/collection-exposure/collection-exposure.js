@@ -14,7 +14,7 @@ var plugin = class extends Quantum.Model.Plugin {
             return collection.find(filters, options);
         };
 
-        Meteor.publishComposite(atom.name, (filters = {}, options = {}) => {
+        Meteor.publishComposite(atom.name, function (filters = {}, options = {}) {
             filterManipulator.apply(this.userId, filters, options);
 
             let returnable = {};

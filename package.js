@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.16',
+    version: '1.0.17',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -44,7 +44,9 @@ Package.onUse(function (api) {
 
     // others
     api.addFiles([
-        'lib/roles.js'
+        'init.js',
+        'lib/roles.js',
+        'lib/any.js'
     ]);
 
     // plugins
@@ -87,7 +89,7 @@ Package.onUse(function (api) {
     api.addFiles('boot.js');
 
     api.export(['tpl', 'tplData', 'data', 'form'], 'client');
-    api.export(['Any']); // used by schema
+    api.export(['Q', 'QF', 'Any']); // used by schema
 });
 
 Package.onTest(function (api) {

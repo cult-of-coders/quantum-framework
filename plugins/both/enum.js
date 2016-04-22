@@ -4,7 +4,7 @@ class Enum {
     }
 
     selectize() {
-        return _.map(this.elements, (value, label) => {
+        return _.map(this.elements, (label, value) => {
             return {
                 label: label,
                 value: value

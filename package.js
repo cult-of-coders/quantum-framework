@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.17',
+    version: '1.0.18',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -53,6 +53,7 @@ Package.onUse(function (api) {
     api.addFiles([
         'plugins/both/datastore.js',
         'plugins/both/schema.js',
+        'plugins/both/enum.js',
         'plugins/both/service.js',
         'plugins/both/collection.js',
         'plugins/both/user.js'

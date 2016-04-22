@@ -10,7 +10,7 @@ Package.onUse(function (api) {
     api.versionsFrom('1.2.1');
 
     var packages = [
-        'cultofcoders:quantum-core@1.0.4',
+        'cultofcoders:quantum-core@1.0.6',
         'meteor-base',
         'mobile-experience',
         'mongo',

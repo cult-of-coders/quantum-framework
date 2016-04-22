@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.19',
+    version: '1.0.20',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -56,6 +56,7 @@ Package.onUse(function (api) {
         'plugins/both/enum.js',
         'plugins/both/service.js',
         'plugins/both/collection.js',
+        'plugins/both/collection-behavior.js',
         'plugins/both/user.js'
     ]);
 
@@ -73,7 +74,7 @@ Package.onUse(function (api) {
         'plugins/client/collection-exposure.js',
         'plugins/client/template.js',
         'plugins/client/viewmodel.js',
-        'plugins/client/template-behaviors.js',
+        'plugins/client/template-behavior.js',
         'plugins/client/paginator/paginator-service.coffee',
         'plugins/client/paginator/paginator.html',
         'plugins/client/paginator/paginator.coffee',

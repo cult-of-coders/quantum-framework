@@ -18,15 +18,16 @@ let helperClass = class {
 
 let plugin = class extends Quantum.Model.Plugin {
     build(atom) {
+        let config = atom.config;
         let helper = new helperClass(atom.config);
 
         Template[atom.name].onCreated(function () {
-            this._form_helper = helper;
+            this._formHelper = helper;
         });
 
         Template[atom.name].helpers({
             formHelper: function (doc) {
-                let formHelper = Template.instance()._form_helper;
+                let formHelper = Template.instance()._formHelper;
                 formHelper.update(doc);
 
                 return formHelper;
@@ -35,7 +36,7 @@ let plugin = class extends Quantum.Model.Plugin {
 
         if (atom.config.events) {
             let hooks = {};
-            hooks[helper.id] = atom.config.events;
+            hooks[config.formId] = atom.config.events;
             AutoForm.hooks(hooks);
         }
     }

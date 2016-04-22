@@ -48,7 +48,7 @@ tplData = function(templateInstance, keyOrObject, optionalValue) {
  * @param optionalValue
  */
 data = function(keyOrObject, optionalValue) {
-    tplData(tpl(), keyOrObject, optionalValue);
+    return tplData(tpl(), keyOrObject, optionalValue);
 };
 
 /**

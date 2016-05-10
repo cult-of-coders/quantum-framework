@@ -61,21 +61,31 @@ Example usage:
 // or if you want built in use, read more about Templating Listify
 
 Template.myTemplate.onCreated(function() {
-    this._paginator = Q('service ui.paginator').build(mongoCollection, {
+    this._paginator = Q('service quantum.paginator').build(mongoCollection, {
         subscriptionName: subscriptionName,
         countMethod: "mycountMethod",
         pageSize: 10
     }, {
-        main: ReactiveVar({}), // filters
-        options: ReactiveVar({}) // filters options
+        main: ReactiveVar({}), // optional filters
+        options: ReactiveVar({}) // optional filters options
     });
-    
-    // use it in a helper:
-    this._paginator.find({})
-    
-    // display the navigation within your template:
-    {{> QuantumPaginator }}
 });
+
+Template.myTemplate.helpers({
+    elements() {
+        return Template.instance()._paginator.find({});
+    }
+})
+```
+
+In the template
+```
+<template name="myTemplate">
+    {{# each elements }}
+        {{ name }}
+    {{/ each }}
+    {{> QuantumPaginator elements }}
+</template>
 ```
 
 Templating Listify

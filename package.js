@@ -41,7 +41,7 @@ Package.onUse(function (api) {
     api.imply(packages);
 
     api.use([
-        'sacha:juice',
+        'sacha:juice@0.1.4',
         'chrisbutler:node-sass@3.4.2'
     ]);
 

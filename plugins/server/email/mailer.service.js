@@ -17,10 +17,9 @@ QF.add('service', 'quantum.email.atom', {
          * @param to
          * @param data
          * @param emailConfig
-         * @param attachments
          * @returns {*}
          */
-        send(to, data, emailConfig, attachments) {
+        send(to, data, emailConfig) {
             let config = _.extend({}, this.config, emailConfig);
             let html = this._applyStyles(
                 this._getHtml(emailConfig, data)
@@ -31,7 +30,7 @@ QF.add('service', 'quantum.email.atom', {
             // for debugging purposes we either dump to console, either send all emails to a single user
             let testConfig = this.plugin.config('test');
             if (testConfig === console) {
-                return this._dumpToConsole(to, subject, data, attachments, html);
+                return this._dumpToConsole(to, subject, data, emailConfig.attachments, html);
             } else if (testConfig instanceof String) {
                 to = testConfig;
             }
@@ -41,7 +40,7 @@ QF.add('service', 'quantum.email.atom', {
                 to: to,
                 from: config.from,
                 html: html,
-                attachments: attachments
+                attachments: emailConfig.attachments
             });
         }
 

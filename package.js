@@ -1,9 +1,14 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.1.1',
-    summary: 'Aggregates the quantum framework core and plugins.',
+    version: '1.1.2',
+    summary: 'The Quantum Framework',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
+});
+
+Npm.depends({
+    'juice': '1.11.0',
+    'node-sass': '3.7.0'
 });
 
 Package.onUse(function (api) {
@@ -20,6 +25,7 @@ Package.onUse(function (api) {
         'jquery',
         'tracker',
         'check',
+        'random',
         'reactive-var',
         'standard-minifiers',
         'es5-shim',
@@ -28,14 +34,14 @@ Package.onUse(function (api) {
         'aldeed:autoform@5.8.1',
         'alanning:roles@1.2.15',
         'raix:handlebar-helpers@0.2.5',
-        'yasaricli:slugify@0.0.7',
         'matb33:collection-hooks@0.8.1',
         'reywood:publish-composite@1.4.2',
         'aldeed:collection2@2.9.1',
         'aldeed:simple-schema@1.5.3',
         'dburles:collection-helpers@1.0.4',
-        'momentjs:moment@2.12.0'
+        'meteorhacks:ssr@2.2.0'
     ];
+
 
     api.use(packages);
     api.imply(packages);
@@ -68,6 +74,9 @@ Package.onUse(function (api) {
     api.addFiles([
         'plugins/server/collection-exposure/filter-manipulator.js',
         'plugins/server/collection-exposure/collection-exposure.js',
+        'plugins/server/email/atom.schema.js',
+        'plugins/server/email/mailer.service.js',
+        'plugins/server/email/email.js'
     ], 'server');
 
     api.addFiles([
@@ -91,7 +100,7 @@ Package.onUse(function (api) {
 
     api.addFiles('boot.js');
 
-    api.export(['tpl', 'data', 'formField'], 'client');
+    api.export(['tpl'], 'client');
     api.export(['Q', 'MQ', 'QF', 'Any']); // used by schema
 });
 

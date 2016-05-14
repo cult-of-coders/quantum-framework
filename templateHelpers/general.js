@@ -42,14 +42,6 @@ Template.registerHelper('selectize', function(object) {
     });
 });
 
-Template.registerHelper('setting', function(name) {
-    return Meteor.settings["public"][name];
-});
-
-Template.registerHelper('slugify', function(value) {
-    return slugify(value, '-');
-});
-
 Template.registerHelper('querify', function(name, val) {
     return name + '=' + val;
 });

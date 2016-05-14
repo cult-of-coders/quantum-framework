@@ -20,7 +20,7 @@ var plugin = class extends Quantum.Model.Plugin {
         let tpl = Template[templateName];
 
         _.each(when, (handler, when) => {
-            tpl[when].call(handler);
+            tpl[when](handler);
         });
     }
 };

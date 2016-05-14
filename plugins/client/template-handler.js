@@ -11,7 +11,7 @@ let plugin = class extends Quantum.Model.Plugin {
             return function(e, tpl) {
                 let $el = $(e.currentTarget);
                 let modelMethod = $el.attr(attr);
-                model[modelMethod].call(e, tpl, $el);
+                model[modelMethod](e, tpl, $el);
             }
         };
 

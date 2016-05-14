@@ -1,6 +1,10 @@
 class RoleManager {
     add(userId, role, group) {
-        return Roles.addUsersToRoles(userId, [role], group)
+        return Roles.addUsersToRoles(userId, role, group)
+    }
+
+    remove(userId, role, group) {
+        return Roles.removeUsersFromRoles(userId, role, group)
     }
 
     has(userId, role, group) {

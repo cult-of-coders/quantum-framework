@@ -10,11 +10,28 @@ let plugin = class extends Quantum.Model.Plugin {
             roles.storeHierarchy(config.roleHierarchy);
         }
 
+        if (config.schema) {
+            QF.add('schema', 'user', _.extend(this.defaultUserSchema(), config.schema));
+        }
+
         if (config.collection) {
             config.collection.existingCollection = Meteor.users;
             config.collection.schema = 'user';
 
             QF.add('collection', 'user', config.collection);
+        }
+
+        if (Meteor.isServer) {
+            config.selfFields = config.selfFields || {};
+            config.selfFields.roles = 1;
+
+            Meteor.publish(null, function() { // auto publish these fields
+                if (this.userId) {
+                    return Meteor.users.find({_id: this.userId},  {fields: config.selfFields});
+                } else {
+                    this.ready();
+                }
+            })
         }
     }
 
@@ -29,12 +46,22 @@ let plugin = class extends Quantum.Model.Plugin {
                 type: Object,
                 optional: true,
                 blackbox: true
+            },
+            schema: {
+                type: Object,
+                optional: true,
+                blackbox: true
+            },
+            selfFields: {
+                type: Object,
+                blackbox: true,
+                optional: true
             }
         }
     }
 
     /**
-     * Q('schema user', _.extend(Q('schema').defaultUserSchema(), {
+     * Q('schema user', _.extend(Q('user').defaultUserSchema(), {
      *      yourFieldSchemas: {}
      * });
      */
@@ -65,12 +92,12 @@ let plugin = class extends Quantum.Model.Plugin {
                 optional: true,
                 blackbox: true
             },
-            confirmationToken: {
-                type: String,
-                optional: true
-            },
             createdAt: {
                 type: Date,
+                optional: true
+            },
+            username: {
+                type: String,
                 optional: true
             },
             profile: {

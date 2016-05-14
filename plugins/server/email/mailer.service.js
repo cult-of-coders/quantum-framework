@@ -111,7 +111,7 @@ QF.add('service', 'quantum.email.atom', {
             }
 
             if (this.plugin.config('layout')) {
-                return this.plugin.Assets.getText(this.plugin.config('layout'));
+                return this.plugin.config('reader').getText(this.plugin.config('layout'));
             }
         }
 
@@ -132,7 +132,7 @@ QF.add('service', 'quantum.email.atom', {
             let styleContent = '';
 
             if (this.plugin.config('scss')) {
-                styleContent += this.Assets.getText(this.plugin.config('scss'));
+                styleContent += this.plugin.config('reader').getText(this.plugin.config('scss'));
             }
 
             if (this.config.scss) {
@@ -140,9 +140,6 @@ QF.add('service', 'quantum.email.atom', {
             }
 
             if (styleContent === '') return html;
-
-            const sass = require('node-sass');
-            const juice = require('juice');
 
             let output = sass.renderSync({data: styleContent});
             let styledHtml = `<style>${output.css}</style>` + html;

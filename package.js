@@ -1,21 +1,16 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.1.2',
+    version: '1.1.3',
     summary: 'The Quantum Framework',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
-});
-
-Npm.depends({
-    'juice': '1.11.0',
-    'node-sass': '3.7.0'
 });
 
 Package.onUse(function (api) {
     api.versionsFrom('1.2.1');
 
     var packages = [
-        'cultofcoders:quantum-core@1.1.0',
+        'cultofcoders:quantum-core@1.1.1',
         'meteor-base',
         'mobile-experience',
         'mongo',
@@ -42,9 +37,13 @@ Package.onUse(function (api) {
         'meteorhacks:ssr@2.2.0'
     ];
 
-
     api.use(packages);
     api.imply(packages);
+
+    api.use([
+        'sacha:juice',
+        'chrisbutler:node-sass@3.4.2'
+    ]);
 
     // others
     api.addFiles([

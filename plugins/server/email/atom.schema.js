@@ -6,5 +6,6 @@ Q('schema quantum.email.atom', {
     helpers: {type: Object, blackbox: true, optional: true},
     route: {type: Function, optional: true},
     schema: {type: Any, optional: true},
-    subject: {type: Any}
+    subject: {type: Any},
+    reader: {type: Object, blackbox: true, optional: true}
 });

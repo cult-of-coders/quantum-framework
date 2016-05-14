@@ -1,9 +1,13 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.1.3',
+    version: '1.1.4',
     summary: 'The Quantum Framework',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
+});
+
+Npm.depends({
+    'less': '2.7.1'
 });
 
 Package.onUse(function (api) {
@@ -41,8 +45,7 @@ Package.onUse(function (api) {
     api.imply(packages);
 
     api.use([
-        'sacha:juice@0.1.4',
-        'chrisbutler:node-sass@3.4.2'
+        'sacha:juice@0.1.4'
     ]);
 
     // others

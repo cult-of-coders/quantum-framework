@@ -1,3 +1,6 @@
+const less = Npm.require('less');
+const Future = Npm.require('fibers/future');
+
 QF.add('service', 'quantum.email.atom', {
     factory: true,
     definition: class {
@@ -131,17 +134,20 @@ QF.add('service', 'quantum.email.atom', {
         _applyStyles(html) {
             let styleContent = '';
 
-            if (this.plugin.config('scss')) {
-                styleContent += this.plugin.config('reader').getText(this.plugin.config('scss'));
+            if (this.plugin.config('less')) {
+                styleContent += this.plugin.config('reader').getText(this.plugin.config('less'));
             }
 
-            if (this.config.scss) {
-                styleContent += '\n' + this.Assets.getText(this.config.scss);
+            if (this.config.less) {
+                styleContent += '\n' + this.Assets.getText(this.config.less);
             }
 
             if (styleContent === '') return html;
 
-            let output = sass.renderSync({data: styleContent});
+            const f = new Future;
+            less.render(styleContent, {}, f.resolver());
+            let output = f.wait();
+
             let styledHtml = `<style>${output.css}</style>` + html;
 
             return juice(styledHtml);

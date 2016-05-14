@@ -10,7 +10,7 @@ let plugin = class extends Quantum.Model.Plugin {
     configSchema() {
         return {
             from: {type: String},
-            scss: {type: String, optional: true},
+            less: {type: String, optional: true},
             layout: {type: String, optional: true},
             test: {type: Any, optional: true},
             helpers: {type: Object, blackbox: true, optional: true},

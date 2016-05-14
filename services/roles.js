@@ -4,6 +4,10 @@ class RoleManager {
     }
 
     has(userId, role, group) {
+        if (role == 'ANONYMOUS') {
+            return true;
+        }
+
         if (role == 'USER' && userId) {
             return true;
         }
@@ -53,4 +57,6 @@ class RoleManager {
     }
 }
 
-Quantum.Roles = new RoleManager();
+QF.add('service', 'roles', {
+    definition: RoleManager
+});

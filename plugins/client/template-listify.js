@@ -3,6 +3,7 @@
 let plugin = class extends Quantum.Model.Plugin {
     build(atom) {
         let config = atom.config;
+
         let collection = Quantum.instance.use('collection', config.collection);
         let subscriptionName = config.collection; // collection-exposure uses the same
 
@@ -11,26 +12,31 @@ let plugin = class extends Quantum.Model.Plugin {
         if (config.options) { options = config.options() }
 
         let onCreated = function () {
-            this._list_filters = new ReactiveVar(filters);
-            this._list_options = new ReactiveVar(options);
+            this.listify = {};
+            this.listify.filters = new ReactiveVar(filters);
+            this.listify.options = new ReactiveVar(options);
+            this.listify.extend = (value, options) => {
+                let object = _.extend(this.listify[value].get(), options);
+                this.listify[value].set(object)
+            };
 
-            this._paginator = Quantum.instance.use('service', 'quantum.paginator').build(collection, {
+            this.listify.paginator = Quantum.instance.use('service', 'quantum.paginator').build(collection, {
                 subscriptionName: subscriptionName,
                 countMethod: `${subscriptionName}.count`,
                 pageSize: config.itemsPerPage
             }, {
-                main: this._list_filters,
-                options: this._list_options
+                main: this.listify.filters,
+                options: this.listify.options
             });
 
-            this._paginator.init(this);
+            this.listify.paginator.init(this);
         };
 
         let helpers = {};
         helpers[config.itemsVariable] = function () {
             let tpl = Template.instance();
 
-            return tpl._paginator.find(tpl._list_filters.get(), tpl._list_options.get());
+            return tpl.listify.paginator.find(tpl.listify.filters.get(), tpl.listify.options.get());
         };
 
         if (!Template[atom.name]) {
@@ -56,17 +62,15 @@ let plugin = class extends Quantum.Model.Plugin {
             },
             itemsVariable: {
                 type: String,
-                defaultValue: 'items'
+                defaultValue: 'items',
+                optional: true
             },
             itemsPerPage: {
                 type: Number,
-                defaultValue: 10
+                defaultValue: 10,
+                optional: true
             }
         };
-    }
-
-    requires() {
-        return ['collection-exposure'];
     }
 
     executionContext() {
@@ -74,6 +78,17 @@ let plugin = class extends Quantum.Model.Plugin {
     }
 };
 
+Quantum.instance.plugin('template').extend({
+    'listify': {
+        type: Object,
+        blackbox: true,
+        optional: true
+    }
+}, function (atom) {
+    if (atom.config.listify) {
+        QF.add('template-listify', atom.name, atom.config.listify);
+    }
+});
 
 Quantum.instance.plugin('template-listify', plugin);
 

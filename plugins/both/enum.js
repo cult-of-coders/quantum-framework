@@ -16,8 +16,12 @@ class Enum {
         return _.keys(this.elements);
     }
 
-    value(k) {
-        return this.elements[k];
+    labels() {
+        return _.values(this.elements);
+    }
+
+    exists(k) {
+        return this.elements[k] !== undefined;
     }
 }
 

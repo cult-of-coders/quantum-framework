@@ -13,11 +13,20 @@ Q = function(string, config) {
         if (config === undefined) {
             return Quantum.instance.use(pluginName, atomName);
         } else {
-            Quantum.instance.add(pluginName, atomName, config);
+            let atom = Quantum.instance.add(pluginName, atomName, config);
+            if (atom.result) {
+                return atom.result;
+            }
         }
     }
 
     [pluginName, atomName] = string.split(' ');
+};
+
+MQ = function (plugin, config) {
+  _.each(config, (atomConfig, atomName) => {
+        Q(atomName, atomConfig);
+    })
 };
 
 QF = Quantum.instance = new Quantum.Model.Body();

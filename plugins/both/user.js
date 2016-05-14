@@ -4,8 +4,10 @@ let plugin = class extends Quantum.Model.Plugin {
     }
 
     configure(config) {
+        let roles = QF.use('service', 'roles');
+        
         if (config.roleHierarchy) {
-            Quantum.Roles.storeHierarchy(config.roleHierarchy);
+            roles.storeHierarchy(config.roleHierarchy);
         }
 
         if (config.collection) {

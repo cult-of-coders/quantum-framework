@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.0.24',
+    version: '1.1.0',
     summary: 'Aggregates the quantum framework core and plugins.',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -10,7 +10,7 @@ Package.onUse(function (api) {
     api.versionsFrom('1.2.1');
 
     var packages = [
-        'cultofcoders:quantum-core@1.0.6',
+        'cultofcoders:quantum-core@1.1.0',
         'meteor-base',
         'mobile-experience',
         'mongo',
@@ -23,10 +23,8 @@ Package.onUse(function (api) {
         'reactive-var',
         'standard-minifiers',
         'es5-shim',
-        'coffeescript',
         'ecmascript',
         'accounts-base',
-        'manuel:viewmodel@4.0.6',
         'aldeed:autoform@5.8.1',
         'alanning:roles@1.2.15',
         'raix:handlebar-helpers@0.2.5',
@@ -45,7 +43,6 @@ Package.onUse(function (api) {
     // others
     api.addFiles([
         'init.js',
-        'lib/roles.js',
         'lib/any.js'
     ]);
 
@@ -56,30 +53,34 @@ Package.onUse(function (api) {
         'plugins/both/enum.js',
         'plugins/both/service.js',
         'plugins/both/collection.js',
+        'plugins/both/collection-hooks.js',
         'plugins/both/collection-behavior.js',
-        'plugins/both/user.js'
+        'plugins/both/user.js',
+        'plugins/both/method.js',
+        'plugins/both/collection-mutators.js'
     ]);
 
+    api.addFiles([
+        'services/roles.js',
+        'services/quantum.utils.js'
+    ]);
 
     api.addFiles([
-        'plugins/server/method.js',
-        'plugins/server/collection-methods.js',
-        'plugins/server/collection-security.js',
-        'plugins/server/collection-hooks.js',
         'plugins/server/collection-exposure/filter-manipulator.js',
         'plugins/server/collection-exposure/collection-exposure.js',
     ], 'server');
 
     api.addFiles([
-        'plugins/client/collection-exposure.js',
         'plugins/client/template.js',
-        'plugins/client/viewmodel.js',
+        'plugins/client/template-handler.js',
         'plugins/client/template-behavior.js',
-        'plugins/client/paginator/paginator-service.coffee',
+        'plugins/client/template-state.js',
+        'plugins/client/template-service.js',
+        'plugins/client/paginator/paginator-service.js',
         'plugins/client/paginator/paginator.html',
-        'plugins/client/paginator/paginator.coffee',
+        'plugins/client/paginator/paginator.js',
+        'plugins/client/crudify.js',
         'plugins/client/template-listify.js',
-        'plugins/client/template-crudify.js',
         'plugins/client/template-formify.js'
     ], 'client');
 
@@ -90,8 +91,8 @@ Package.onUse(function (api) {
 
     api.addFiles('boot.js');
 
-    api.export(['tpl', 'tplData', 'data', 'form'], 'client');
-    api.export(['Q', 'QF', 'Any']); // used by schema
+    api.export(['tpl', 'data', 'formField'], 'client');
+    api.export(['Q', 'MQ', 'QF', 'Any']); // used by schema
 });
 
 Package.onTest(function (api) {

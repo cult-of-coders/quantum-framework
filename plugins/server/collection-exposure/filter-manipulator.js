@@ -3,12 +3,11 @@
  */
 Quantum.Model.FilterManipulation = class {
     /**
-     * @param filtersByRoles
-     * @param fieldsByRoles
+     * @param secureByRoles
      */
-    constructor(filtersByRoles, fieldsByRoles) {
-        this.filtersByRoles = filtersByRoles;
-        this.fieldsByRoles = fieldsByRoles;
+    constructor(secureByRoles) {
+        this.secureByRoles = secureByRoles;
+        this.roles = QF.use('service', 'roles');
     }
 
     /**
@@ -18,85 +17,25 @@ Quantum.Model.FilterManipulation = class {
      * @param options
      */
     apply(userId, filters, options) {
-        if (this.filtersByRoles) {
-            this.applyFiltersByRoles(userId, filters)
-        }
-        if (this.fieldsByRoles) {
-            this.filterFieldsByRoles(userId, options)
-        }
-    }
+        if (!this.secureByRoles) return;
 
-    /**
-     * Applying well defined smart filters.
-     *
-     * @param userId
-     * @param filters
-     */
-    applyFiltersByRoles(userId, filters) {
-        if (!this.filtersByRoles) {
-            return;
+        if (this.secureByRoles.length === 0) {
+            return; // he hasn't setup any filters, otherwise it means we block everyone from a publication which makes no sense.
         }
 
-        let foundEvent = class {};
-        try {
-            if (this.filtersByRoles.length === 0) {
-                return; // he hasn't setup any filters, otherwise it means we block everyone from a publication which makes no sense.
+        let foundRole = false;
+        _.each(this.secureByRoles, (secureFunction, roleName) => {
+            if (foundRole) return;
+
+            if (this.roles.has(userId, roleName)) { // the first role it found it applies filters so make sure you put it in a hierarchy.
+                secureFunction(userId, filters, options);
+                foundRole = true;
             }
+        });
 
-            _.each(this.filtersByRoles, (actualFilters, roleName) => {
-                var processedFilters;
-                if (typeof actualFilters === 'function') {
-                    processedFilters = actualFilters(userId);
-                    if (!processedFilters) {
-                        throw 'Your filter function did not return anything. Did you forget something ?'
-                    }
-                } else {
-                    processedFilters = actualFilters;
-                }
-
-                if (Quantum.Roles.has(userId, roleName)) { // the first role it found it applies filters so make sure you put it in a hierarchy.
-                    _.extend(filters, processedFilters);
-                    throw new foundEvent;
-                }
-            });
-        } catch (e) {
-            if (e instanceof foundEvent) {
-                return true;
-            }
-
-            throw e;
-        }
-
-        // In case no role has been actually found we automatically throw an exception because something is definitely breached.
-
-        throw 'We could not find any matching role';
-    }
-
-    /**
-     *
-     * @param userId
-     * @param options
-     */
-    filterFieldsByRoles(userId, options) {
-        if (!this.fieldsByRoles) {
-            return;
-        }
-
-        let foundEvent = class {
-        };
-        try {
-            _.each(this.fieldsByRoles, (fields, roleName) => {
-                if (Quantum.Roles.has(roleName)) {
-                    options.fields = fields;
-                    throw foundEvent;
-                }
-            })
-        } catch (e) {
-            if (e instanceof foundEvent) {
-                return;
-            }
-
-            throw e;
+        if (!foundRole) {
+            // In case no role has been actually found we automatically throw an exception because something is definitely breached.
+            throw new Meteor.Error('no-role-found', 'We could not find any matching role');
         }
     }
 };

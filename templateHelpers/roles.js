@@ -1,6 +1,8 @@
-Template.registerHelper('hasRole', function(roles) {
+Template.registerHelper('hasRole', function() {
     var values;
     var slice = [].slice;
     values = 1 <= arguments.length ? slice.call(arguments, 0) : [];
-    return Quantum.Roles.has(Meteor.userId(), values);
+    let roles = QF.use('service roles');
+
+    return roles.has(Meteor.userId(), values);
 });

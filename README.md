@@ -160,8 +160,8 @@ Q('template-listify ToDoList', {
 
 Q('template ToDoItem', {
     events: {
-        'click .remove': () => {
-            Meteor.call('todo.remove', data('_id'));
+        'click .remove': (e, tpl) => {
+            Meteor.call('todo.remove', tpl.data._id);
         },
         'click [type="checkbox"]': () => {
             Meteor.call('todo.update', {

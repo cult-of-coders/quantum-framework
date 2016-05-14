@@ -1,28 +1,14 @@
 let plugin = class extends Quantum.Model.Plugin {
-    fixConfig(config) {
-        if (config.list === undefined) {
-            config.list = true;
-        }
-        if (config.edit === undefined) {
-            config.edit = true;
-        }
-        if (config.create === undefined) {
-            config.create = true;
-        }
-    }
-
     build(atom) {
         let config = atom.config;
-        this.fixConfig(config);
 
-        let routeNamePrefix, routePathPrefix;
-
-        [routeNamePrefix, routePathPrefix] = config.routing;
+        ({namePrefix, pathPrefix, allowedRoles} = config.routing);
 
         if (config.list) {
-            QF.add('route', `${routePathPrefix}/list`, {
-                name: `${routeNamePrefix}.list`,
-                template: `${atom.name}List`
+            QF.add('route', `${pathPrefix}/list`, {
+                name: `${namePrefix}.list`,
+                template: `${atom.name}List`,
+                allowedRoles: allowedRoles
             });
 
             if (config.listify) {
@@ -33,9 +19,10 @@ let plugin = class extends Quantum.Model.Plugin {
         }
 
         if (config.edit) {
-            QF.add('route', `${routePathPrefix}/:_id/edit`, {
-                name: `${routeNamePrefix}.edit`,
+            QF.add('route', `${pathPrefix}/:_id/edit`, {
+                name: `${namePrefix}.edit`,
                 template: `${atom.name}Edit`,
+                allowedRoles: allowedRoles,
                 waitOn: function () {
                     return Meteor.subscribe(config.collection, {
                         _id: this.params._id
@@ -52,9 +39,10 @@ let plugin = class extends Quantum.Model.Plugin {
         }
 
         if (config.create) {
-            QF.add('route', `${routePathPrefix}/create`, {
-                name: `${routeNamePrefix}.create`,
-                template: `${atom.name}Create`
+            QF.add('route', `${pathPrefix}/create`, {
+                name: `${namePrefix}.create`,
+                template: `${atom.name}Create`,
+                allowedRoles: allowedRoles
             });
 
             if (config.formify) {
@@ -69,29 +57,33 @@ let plugin = class extends Quantum.Model.Plugin {
                 type: String
             },
             routing: {
-                type: [String]
-            },
-            list: {
-                type: Boolean,
-                optional: true
+                type: new SimpleSchema({
+                    namePrefix: {type: String},
+                    pathPrefix: {type: String},
+                    allowedRoles: {type: [String], optional: true}
+                })
             },
             listify: {
                 type: Object,
                 blackbox: true,
-                optional: true
+                defaultValue: {}
             },
             formify: {
                 type: Object,
                 blackbox: true,
-                optional: true
+                defaultValue: {}
+            },
+            list: {
+                type: Boolean,
+                defaultValue: true
             },
             create: {
                 type: Boolean,
-                optional: true
+                defaultValue: true
             },
             edit: {
                 type: Boolean,
-                optional: true
+                defaultValue: true
             }
         }
     }
@@ -101,4 +93,4 @@ let plugin = class extends Quantum.Model.Plugin {
     }
 };
 
-QF.plugin('template-crudify', plugin);
+QF.plugin('crudify', plugin);

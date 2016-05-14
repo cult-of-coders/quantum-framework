@@ -1,1 +1,0 @@
-Quantum.instance.plugin('collection-exposure', Quantum.Model.Plugin);

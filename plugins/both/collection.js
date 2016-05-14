@@ -1,7 +1,8 @@
 var plugin = class extends Quantum.Model.Plugin {
     build(atom) {
         let config = atom.config,
-            collection;
+            collection,
+            utils = QF.use('service' , 'quantum.utils');
 
         if (config.existingCollection) {
             collection = config.existingCollection;
@@ -9,18 +10,23 @@ var plugin = class extends Quantum.Model.Plugin {
             collection = new Mongo.Collection(atom.name);
         }
 
-        if (config.model) {
-            collection.helpers(config.model)
-        }
-        if (config.extend) {
-            _.extend(collection, config.extend);
-        }
+        if (config.model) collection.helpers(config.model);
+        if (config.extend) _.extend(collection, config.extend);
 
         if (config.schema) {
-            let schema = Quantum.instance.use('schema', config.schema);
-
-            collection.attachSchema(schema);
+            collection.attachSchema(utils.getSchema(schema));
         }
+
+        _.extend(collection, {
+            findByIds(ids) {
+                if (!ids) ids = [];
+
+                return this.find({_id: {$in: ids}})
+            },
+            findOneReactive(id) {
+                return _.first(this.find(id).fetch())
+            }
+        });
 
         return collection;
     }
@@ -38,7 +44,7 @@ var plugin = class extends Quantum.Model.Plugin {
                 blackbox: true
             },
             'schema': {
-                type: String,
+                type: Any,
                 optional: true
             },
             'existingCollection': {

@@ -2,18 +2,19 @@ var plugin = class extends Quantum.Model.Plugin {
     build(atom) {
         var config = atom.config;
         var templateName = atom.name;
+        let tpl = Template[templateName];
 
         if (config.helpers) {
-            Template[templateName].helpers(config.helpers)
+            tpl.helpers(config.helpers)
         }
         if (config.events) {
-            Template[templateName].events(config.events)
+            tpl.events(config.events)
         }
         if (config.onCreated) {
-            Template[templateName].onCreated(config.onCreated)
+            tpl.onCreated(config.onCreated)
         }
         if (config.onRendered) {
-            Template[templateName].onRendered(config.onRendered);
+            tpl.onRendered(config.onRendered);
         }
 
         Quantum.Model.Utils.eventify(Template[templateName]);
@@ -43,6 +44,11 @@ var plugin = class extends Quantum.Model.Plugin {
             },
             'onDestroyed': {
                 type: Function,
+                optional: true
+            },
+            'state': {
+                type: Object,
+                blackbox: true,
                 optional: true
             }
         }

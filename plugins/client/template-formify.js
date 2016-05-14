@@ -2,23 +2,29 @@
 let helperClass = class {
     constructor(config) {
         this._config = config;
+        this.utils = QF.use('service', 'quantum.utils');
     }
     update(doc) {
         let config = this._config;
 
         this.doc = doc;
         this.id = config.formId;
-        this.schema = Quantum.instance.use('schema', this._config.schema);
+        this.schema = this.utils.getSchema(config.schema);
         this.type = (this.doc && this.doc._id) ? 'method-update' : 'method';
 
         let methodSuffix = (this.doc && this.doc._id) ? 'update' : 'insert';
-        this.meteormethod = `${this._config.methodsPrefix}.${methodSuffix}`;
+        this.meteormethod = `${config.methodsPrefix}.${methodSuffix}`;
     }
 };
 
 let plugin = class extends Quantum.Model.Plugin {
     build(atom) {
         let config = atom.config;
+
+        if (!config.formId) {
+            config.formId = atom.name;
+        }
+
         let helper = new helperClass(atom.config);
 
         Template[atom.name].onCreated(function () {
@@ -47,10 +53,11 @@ let plugin = class extends Quantum.Model.Plugin {
                 type: String
             },
             formId: {
-                type: String
+                type: String,
+                optional: true
             },
             schema: {
-                type: String,
+                type: Any,
                 optional: true
             },
             events: {
@@ -61,5 +68,19 @@ let plugin = class extends Quantum.Model.Plugin {
         }
     }
 };
+
+Quantum.instance.plugin('template').extend({
+    'formify': {
+        type: Object,
+        blackbox: true,
+        optional: true
+    }
+}, function (atom) {
+
+    if (atom.config.formify) {
+        let templateName = atom.name;
+        QF.add('template-formify', atom.name, atom.config.formify);
+    }
+});
 
 Quantum.instance.plugin('template-formify', plugin);

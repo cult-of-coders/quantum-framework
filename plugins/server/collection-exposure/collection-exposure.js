@@ -1,8 +1,21 @@
 var plugin = class extends Quantum.Model.Plugin {
     build(atom) {
-        let collection = Quantum.instance.use('collection', atom.name);
         let config = atom.config;
-        let filterManipulator = new Quantum.Model.FilterManipulation(config.filtersByRoles, config.fieldsByRoles);
+        let collection = Quantum.instance.use('collection', atom.name);
+
+        let filterManipulator = new Quantum.Model.FilterManipulation(config.secureByRoles);
+
+        let enforceMaxLimit = function (options) {
+            if (!config.maxLimit) return;
+
+            if (options.limit) {
+                if (options.limit > config.maxLimit) {
+                    options.limit = config.maxLimit;
+                }
+            } else {
+                options.limit = config.maxLimit;
+            }
+        };
 
         collection.secureFilters = (userId, filters = {}, options = {}) => {
             filterManipulator.apply(userId, filters, options);
@@ -15,11 +28,11 @@ var plugin = class extends Quantum.Model.Plugin {
         };
 
         Meteor.publishComposite(atom.name, function (filters = {}, options = {}) {
-            filterManipulator.apply(this.userId, filters, options);
-
             let returnable = {};
             returnable.find = function () {
-                return collection.find(filters, options);
+                enforceMaxLimit(options);
+
+                return collection.findSecure(this.userId, filters, options);
             };
 
             if (config.composition) {
@@ -30,17 +43,41 @@ var plugin = class extends Quantum.Model.Plugin {
         });
 
         let methods = {};
-        methods[`${atom.name}.count`] = function (filters = {}) {
-            filterManipulator.apply(this.userId, filters);
 
-            return collection.find(filters).count()
+        methods[`${atom.name}.count`] = function (filters = {}) {
+            return collection.findSecure(this.userId, filters, {}).count()
+        };
+
+        methods[`${atom.name}.find`] = function (filters = {}, options = {}) {
+            return collection.findSecure(this.userId, filters, options).fetch()
+        };
+
+        methods[`${atom.name}.find_ids`] = function (filters = {}, options ={}) {
+            options.fields = {_id: 1};
+            let results = collection.findSecure(this.userId, filters, options).fetch()
+
+            return _.pluck(results, '_id');
         };
 
         Meteor.methods(methods);
     }
 
     schema() {
-
+        return {
+            secureByRoles: {
+                type: Object,
+                blackbox: true,
+                optional: true
+            },
+            composition: {
+                type: [Object],
+                optional: true
+            },
+            maxLimit: {
+                type: Number,
+                defaultValue: 100
+            }
+        }
     }
 
     executionContext() {

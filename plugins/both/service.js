@@ -5,20 +5,26 @@ let factory = class {
     build(...args) {
         return new this._class(...args);
     }
+    extend(object) {
+        _.extend(this._class, object);
+    }
 };
 
 let plugin = class extends Quantum.Model.Plugin {
     build(atom) {
-        if (atom.config.definition instanceof Function) {
-            if (atom.config.factory) {
-                return new factory(atom.config.definition);
+        var config = atom.config;
+
+        // QF.use('service', 'atom', true).extend({})
+        atom.extend = function(object) {
+            _.extend(config.definition.prototype, object);
+        };
+
+        if (config.definition instanceof Function) {
+            if (config.factory) {
+                return new factory(config.definition);
             }
 
-            return new atom.config.definition;
-        }
-
-        if (atom.config.object instanceof Object) {
-            return atom.config.object
+            return new config.definition;
         }
 
         throw 'The service plugin needs either a "prototype" either an "object" as options'
@@ -27,13 +33,7 @@ let plugin = class extends Quantum.Model.Plugin {
     schema() {
         return {
             'definition': {
-                type: Function,
-                optional: true
-            },
-            'object': {
-                type: Object,
-                optional: true,
-                blackbox: true
+                type: Function
             },
             'factory': {
                 type: Boolean,

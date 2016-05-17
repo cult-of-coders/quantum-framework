@@ -22,6 +22,7 @@ Package.onUse(function (api) {
         'blaze-html-templates',
         'session',
         'jquery',
+        'email',
         'tracker',
         'check',
         'random',

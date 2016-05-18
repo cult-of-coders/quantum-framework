@@ -44,7 +44,8 @@ var plugin = class extends Quantum.Model.Plugin {
                 blackbox: true
             },
             'schema': {
-                type: Any,
+                type: null,
+                blackbox: true,
                 optional: true
             },
             'existingCollection': {

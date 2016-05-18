@@ -57,7 +57,8 @@ let plugin = class extends Quantum.Model.Plugin {
                 optional: true
             },
             schema: {
-                type: Any,
+                type: null,
+                blackbox: true,
                 optional: true
             },
             events: {

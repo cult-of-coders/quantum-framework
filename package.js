@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.1.6.1',
+    version: '1.1.6_2',
     summary: 'The Quantum Framework',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -51,8 +51,7 @@ Package.onUse(function (api) {
 
     // others
     api.addFiles([
-        'init.js',
-        'lib/any.js'
+        'init.js'
     ]);
 
     // plugins

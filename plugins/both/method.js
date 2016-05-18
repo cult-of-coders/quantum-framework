@@ -1,6 +1,7 @@
 let plugin = class extends Quantum.Model.Plugin {
     build(atom) {
         let config = atom.config;
+        console.log(config);
         let roles = QF.use('service', 'roles');
         let utils = QF.use('service' , 'quantum.utils');
 
@@ -49,7 +50,8 @@ let plugin = class extends Quantum.Model.Plugin {
                 type: Function
             },
             schema: {
-                type: Any,
+                type: null,
+                blackbox: true,
                 optional: true
             },
             options: {

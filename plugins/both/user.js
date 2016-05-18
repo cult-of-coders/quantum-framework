@@ -84,7 +84,8 @@ let plugin = class extends Quantum.Model.Plugin {
                 optional: true
             },
             roles: {
-                type: Any,
+                type: null,
+                blackbox: true,
                 optional: true
             },
             services: {

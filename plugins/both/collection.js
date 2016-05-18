@@ -14,7 +14,7 @@ var plugin = class extends Quantum.Model.Plugin {
         if (config.extend) _.extend(collection, config.extend);
 
         if (config.schema) {
-            collection.attachSchema(utils.getSchema(schema));
+            collection.attachSchema(utils.getSchema(config.schema));
         }
 
         _.extend(collection, {

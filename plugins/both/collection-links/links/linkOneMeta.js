@@ -1,6 +1,8 @@
 import {Link} from './base.js';
 
 export class LinkOneMeta extends Link {
+    get isSingle() { return true }
+
     applyFindFilters(filters) {
         let value = this.object[this.getLinkStorageField()];
 
@@ -22,6 +24,13 @@ export class LinkOneMeta extends Link {
             $set: {
                 [field]: metadata
             }
+        });
+    }
+
+    applyMetaFilters(filters, metaFilters) {
+        let field = this.getLinkStorageField();
+        _.each(metaFilters, (value, key) => {
+            filters[field + '.' + key] = value;
         });
     }
 

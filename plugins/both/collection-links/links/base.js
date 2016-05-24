@@ -16,17 +16,38 @@ export class Link {
         }
     }
 
-    find(filters = {}, options = {}, ...others) {
+    find(filters = {}, options = {}, metaFilters = {}) {
         let linker = this.linker;
+        this.clean();
+
+        if (this.applyMetaFilters && _.keys(metaFilters).length) {
+            this.applyMetaFilters(filters, metaFilters);
+        }
 
         if (!linker.isVirtual()) {
             this.applyFindFilters(filters);
-            return linker.getLinkedCollection().find(filters, options, ...others);
+            return linker.getLinkedCollection().find(filters, options);
         } else {
             this.applyFindFiltersForVirtual(filters);
-            return linker.getLinkedCollection().find(filters, options, ...others);
+            return linker.getLinkedCollection().find(filters, options);
         }
     }
+
+    /**
+     * @param filters
+     * @param options
+     * @param others
+     * @returns {*|{content}|any}
+     */
+    fetch(filters, options, ...others) {
+        if (this.isSingle) {
+            return _.first(this.find(filters, options, ...others).fetch());
+        }
+
+        return this.find(filters, options, ...others).fetch();
+    }
+
+    clean() {}
 
     applyFindFilters() { throw 'Not Implemented' }
     applyFindFiltersForVirtual() { throw 'Not Implemented'; }

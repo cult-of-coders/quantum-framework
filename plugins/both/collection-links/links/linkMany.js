@@ -1,6 +1,12 @@
 import {Link} from './base.js';
 
 export class LinkMany extends Link {
+    clean() {
+        if (!this.object[this.getLinkStorageField()]) {
+            this.object[this.getLinkStorageField()] = [];
+        }
+    }
+
     /**
      * @param filters
      */
@@ -22,7 +28,7 @@ export class LinkMany extends Link {
     add(what) {
         if (this.isVirtual) throw new Meteor.Error('not-allowed', 'Add/Remove operations should be done from the owner of the relationship');
 
-        if (typeof(what) != 'array') what = [what];
+        if (!_.isArray(what)) what = [what];
         let _ids = _.map(what, el => this._identity(el));
         let field = this.getLinkStorageField();
 
@@ -47,7 +53,7 @@ export class LinkMany extends Link {
     remove(what) {
         if (this.isVirtual) throw new Meteor.Error('not-allowed', 'Add/Remove operations should be done from the owner of the relationship');
 
-        if (typeof(what) != 'array') what = [what];
+        if (!_.isArray(what)) what = [what];
         let _ids = _.map(what, el => this._identity(el));
         let field = this.getLinkStorageField();
 

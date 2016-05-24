@@ -1,39 +1,37 @@
 describe('Collection Links', function () {
-    beforeEach(function () {
-        Q('collection post', {
-            links: {
-                'comments': {
-                    type: '*',
-                    collection: 'comment'
-                },
-                'metaComments': {
-                    type: '*',
-                    collection: 'comment',
-                    metadata: {}
-                },
-                category: {
-                    type: '1'
-                },
-                metaCategory: {
-                    metadata: {},
-                    collection: 'category',
-                    type: '1'
-                }
+    Q('collection post', {
+        links: {
+            'comments': {
+                type: '*',
+                collection: 'comment'
+            },
+            'metaComments': {
+                type: '*',
+                collection: 'comment',
+                metadata: {}
+            },
+            category: {
+                type: '1'
+            },
+            metaCategory: {
+                metadata: {},
+                collection: 'category',
+                type: '1'
             }
-        });
+        }
+    });
 
-        Q('collection comment', {
-            links: {
-                'post': 'post comments',
-                'metaPost': 'post metaComments'
-            }
-        });
+    Q('collection comment', {
+        links: {
+            'post': 'post comments',
+            'metaPost': 'post metaComments'
+        }
+    });
 
-        Q('collection category', {
-            links: {
-                'posts': 'post category'
-            }
-        });
+    Q('collection category', {
+        links: {
+            'posts': 'post category'
+        }
     });
 
     it('Test Many', function () {

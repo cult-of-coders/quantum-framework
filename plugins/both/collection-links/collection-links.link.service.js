@@ -19,6 +19,10 @@ Q('service quantum.collection-links.link', {
             return strategy;
         }
 
+        get linkStorageField() {
+            return this.linkConfig.field;
+        }
+
         get defaultFieldPrefix() {
             return this.linkName + '_' + this.linkConfig.collection
         }
@@ -61,6 +65,15 @@ Q('service quantum.collection-links.link', {
          */
         isVirtual() {
             return this.linkConfig.virtual;
+        }
+
+        /**
+         * @param object
+         * @returns {*}
+         */
+        createAccessor(object) {
+            let helperClass = this._getHelperClass();
+            return new helperClass(this, object);
         }
 
         /**
@@ -111,7 +124,6 @@ Q('service quantum.collection-links.link', {
          */
         _extendHelpers() {
             //console.log('extending helpers' + this.linkName);
-            let helperClass = this._getHelperClass();
             let helperName = this.linkName;
             let linker = this;
 
@@ -122,7 +134,7 @@ Q('service quantum.collection-links.link', {
                         return this[cacheFieldName];
                     }
 
-                    this[cacheFieldName] = new helperClass(linker, this);
+                    this[cacheFieldName] = linker.createAccessor(this);
 
                     return this[cacheFieldName];
                 }

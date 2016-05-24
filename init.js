@@ -29,4 +29,12 @@ MQ = function (plugin, config) {
     })
 };
 
+S = function(atomName, atomConfig) {
+    if (atomConfig === undefined) {
+        return QF.use('service', atomName);
+    } else {
+        return QF.add('service', atomName, atomConfig);
+    }
+};
+
 QF = Quantum.instance = new Quantum.Model.Body();

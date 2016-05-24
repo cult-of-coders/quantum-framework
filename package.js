@@ -7,7 +7,9 @@ Package.describe({
 });
 
 Npm.depends({
-    'less': '2.7.1'
+    'less': '2.7.1',
+    'dotize': '0.1.26',
+    'underscore': '1.8.3'
 });
 
 Package.onUse(function (api) {
@@ -70,8 +72,8 @@ Package.onUse(function (api) {
     ]);
 
     api.addFiles([
-        'services/roles.js',
-        'services/quantum.utils.js'
+        'lib/services/roles.js',
+        'lib/services/quantum.utils.js'
     ]);
 
     api.addFiles([
@@ -97,14 +99,22 @@ Package.onUse(function (api) {
     ], 'client');
 
     api.addFiles([
-        'templateHelpers/roles.js',
-        'templateHelpers/general.js'
+        'lib/templateHelpers/roles.js',
+        'lib/templateHelpers/general.js'
     ], 'client');
+
+
+    // include query
+    api.addFiles([
+        'lib/query/query.parser.service.js',
+        'lib/query/query.service.js'
+    ]);
+    api.addFiles('lib/query/query.publication.js', 'server');
 
     api.addFiles('boot.js');
 
     api.export(['tpl'], 'client');
-    api.export(['Q', 'MQ', 'QF', 'Any']); // used by schema
+    api.export(['S', 'Q', 'MQ', 'QF', 'Any']); // used by schema
 });
 
 Package.onTest(function (api) {
@@ -115,5 +125,9 @@ Package.onTest(function (api) {
 
     api.addFiles([
         'plugins/both/collection-links/collection-links.test.js'
-    ], 'server')
+    ], 'server');
+
+    api.addFiles('lib/query/tests/both.test.js');
+    api.addFiles('lib/query/tests/server.test.js', 'server');
+    api.addFiles('lib/query/tests/client.test.js', 'client');
 });

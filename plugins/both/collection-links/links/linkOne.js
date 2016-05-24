@@ -1,6 +1,8 @@
 import {Link} from './base.js';
 
 export class LinkOne extends Link {
+    get isSingle() { return true }
+
     applyFindFilters(filters) {
         filters._id = this.object[this.getLinkStorageField()];
     }

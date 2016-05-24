@@ -1,6 +1,12 @@
 import {Link} from './base.js';
 
 export class LinkManyMeta extends Link {
+    clean() {
+        if (!this.object[this.getLinkStorageField()]) {
+            this.object[this.getLinkStorageField()] = [];
+        }
+    }
+
     applyFindFilters(filters) {
         let field = this.getLinkStorageField();
         filters._id = {$in: _.pluck(this.object[field], '_id')};
@@ -13,7 +19,7 @@ export class LinkManyMeta extends Link {
     add(what, metadata = {}) {
         if (this.isVirtual) throw new Meteor.Error('not-allowed', 'Add/Remove operations should be done from the owner of the relationship');
 
-        if (typeof(what) != 'array') what = [what];
+        if (!_.isArray(what)) what = [what];
         let _ids = _.map(what, el => this._identity(el));
         let field = this.getLinkStorageField();
 
@@ -35,6 +41,13 @@ export class LinkManyMeta extends Link {
         };
 
         this.linker.getMainCollection().update(this.object._id, modifier);
+    }
+
+    applyMetaFilters(filters, metaFilters) {
+        let field = this.getLinkStorageField();
+        _.each(metaFilters, (value, key) => {
+            filters[field + '.' + key] = value;
+        });
     }
 
     metadata(what, extendMetadata) {
@@ -63,7 +76,7 @@ export class LinkManyMeta extends Link {
     }
 
     remove(what) {
-        if (typeof(what) != 'array') what = [what];
+        if (!_.isArray(what)) what = [what];
         let _ids = _.map(what, el => this._identity(el));
         let field = this.getLinkStorageField();
 

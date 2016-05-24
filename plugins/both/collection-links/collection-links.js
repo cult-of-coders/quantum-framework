@@ -6,6 +6,10 @@ let plugin = class extends Quantum.Model.Plugin {
         atom.linkStore = {};
         let collection = QF.use('collection', atom.name);
 
+        _.extend(collection, {
+            getLink(name) { return atom.linkStore[name]; }
+        });
+
         _.each(atom.config, (linkConfig, linkName) => {
             atom.linkStore[linkName] = {
                 config: linkConfig,
@@ -31,3 +35,5 @@ QF.plugin('collection').extend({
 });
 
 QF.plugin('collection-links', plugin);
+
+

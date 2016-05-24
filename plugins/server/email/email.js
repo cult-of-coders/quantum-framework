@@ -12,7 +12,7 @@ let plugin = class extends Quantum.Model.Plugin {
             from: {type: String},
             less: {type: String, optional: true},
             layout: {type: String, optional: true},
-            test: {type: Any, optional: true},
+            test: {type: null, optional: true, blackbox: true},
             helpers: {type: Object, blackbox: true, optional: true},
             reader: {type: Object, blackbox: true}
         }

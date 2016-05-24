@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.1.8',
+    version: '1.1.8_1',
     summary: 'The Quantum Framework',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -120,7 +120,7 @@ Package.onUse(function (api) {
     api.addFiles('boot.js');
 
     api.export(['tpl'], 'client');
-    api.export(['S', 'Q', 'MQ', 'QF', 'Any']); // used by schema
+    api.export(['S', 'Q', 'MQ', 'QF']); // used by schema
 });
 
 Package.onTest(function (api) {

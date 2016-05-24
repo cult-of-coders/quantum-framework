@@ -8,6 +8,11 @@ export class Link {
         this.object = object;
     }
 
+    /**
+     * Returns the field name where the links are stored.
+     *
+     * @returns string
+     */
     getLinkStorageField() {
         if (this.linker.isVirtual()) {
             return this.config.relatedLinkConfig.field;
@@ -16,6 +21,14 @@ export class Link {
         }
     }
 
+    /**
+     * Finds linked data.
+     *
+     * @param filters
+     * @param options
+     * @param metaFilters
+     * @returns {*}
+     */
     find(filters = {}, options = {}, metaFilters = {}) {
         let linker = this.linker;
         this.clean();
@@ -47,10 +60,21 @@ export class Link {
         return this.find(filters, options, ...others).fetch();
     }
 
+    /**
+     * When we are dealing with multiple type relationships, $in would require an array. If the field value is null, it will fail
+     * We use clean to make it an empty array by default.
+     */
     clean() {}
 
-    applyFindFilters() { throw 'Not Implemented' }
-    applyFindFiltersForVirtual() { throw 'Not Implemented'; }
+    /**
+     * We have an object stored. Based on that object. How do I receive the related elements ?
+     */
+    applyFindFilters(filters) { throw 'Not Implemented' }
+
+    /**
+     * I have a virtual link, how should I search in the other collection to retrieve my data ?
+     */
+    applyFindFiltersForVirtual(filters) { throw 'Not Implemented'; }
 
     /**
      * @param objectOrString

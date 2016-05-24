@@ -60,6 +60,8 @@ export class LinkMany extends Link {
         if (typeof(this.object[field]) != 'array') {
             this.object[field] = [];
         }
+
+        // update the field
         this.object[field] = _.filter(this.object[field], _id => !_.contains(_ids, _id));
 
         let modifier = {

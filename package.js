@@ -16,7 +16,7 @@ Package.onUse(function (api) {
     api.versionsFrom('1.2.1');
 
     var packages = [
-        'cultofcoders:quantum-core@1.1.1',
+        'cultofcoders:quantum-core@1.1.2',
         'meteor-base',
         'mobile-experience',
         'mongo',
@@ -60,6 +60,7 @@ Package.onUse(function (api) {
         'lib/collection-helpers.lib.js',
         'plugins/both/datastore.js',
         'plugins/both/schema.js',
+        'plugins/both/runner.js',
         'plugins/both/enum.js',
         'plugins/both/service.js',
         'plugins/both/collection.js',
@@ -106,10 +107,14 @@ Package.onUse(function (api) {
 
     // include query
     api.addFiles([
-        'lib/query/query.parser.service.js',
-        'lib/query/query.service.js'
+        'lib/query/query.plugin.js',
+        'lib/query/query-parser.service.js',
+        'lib/query/query-builder.service.js'
     ]);
-    api.addFiles('lib/query/query.publication.js', 'server');
+    api.addFiles([
+        'lib/query/query.publication.js',
+        'lib/query/query-fetcher.service.js'
+    ], 'server');
 
     api.addFiles('boot.js');
 
@@ -127,7 +132,8 @@ Package.onTest(function (api) {
         'plugins/both/collection-links/collection-links.test.js'
     ], 'server');
 
-    api.addFiles('lib/query/tests/both.test.js');
+    api.addFiles('lib/query/tests/bootstrap.js');
+    api.addFiles('lib/query/tests/fixtures.js', 'server');
     api.addFiles('lib/query/tests/server.test.js', 'server');
     api.addFiles('lib/query/tests/client.test.js', 'client');
 });

@@ -7,15 +7,25 @@ export class LinkManyMeta extends Link {
         }
     }
 
+    /**
+     * @param filters
+     */
     applyFindFilters(filters) {
         let field = this.getLinkStorageField();
         filters._id = {$in: _.pluck(this.object[field], '_id')};
     }
 
+    /**
+     * @param filters
+     */
     applyFindFiltersForVirtual(filters) {
         filters[this.getLinkStorageField() + '._id'] = this.object._id;
     }
 
+    /**
+     * @param what
+     * @param metadata
+     */
     add(what, metadata = {}) {
         if (this.isVirtual) throw new Meteor.Error('not-allowed', 'Add/Remove operations should be done from the owner of the relationship');
 
@@ -43,6 +53,10 @@ export class LinkManyMeta extends Link {
         this.linker.getMainCollection().update(this.object._id, modifier);
     }
 
+    /**
+     * @param filters
+     * @param metaFilters
+     */
     applyMetaFilters(filters, metaFilters) {
         let field = this.getLinkStorageField();
         _.each(metaFilters, (value, key) => {
@@ -50,6 +64,11 @@ export class LinkManyMeta extends Link {
         });
     }
 
+    /**
+     *
+     * @param what
+     * @param extendMetadata
+     */
     metadata(what, extendMetadata) {
         if (this.isVirtual) throw new Meteor.Error('not-allowed', 'Metadata operations should be done from the owner of the relationship');
 

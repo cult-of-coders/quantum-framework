@@ -6,10 +6,18 @@ import {LinkOneMeta} from './links/linkOneMeta.js';
 Q('service quantum.collection-links.link', {
     factory: true,
     definition: class {
+        /**
+         * Values which represent for the relation a single link
+         * @returns {string[]}
+         */
         get oneTypes() {
             return ['one', '1', 'single'];
         }
 
+        /**
+         * Returns the strategies: one, many, one-meta, many-meta
+         * @returns {string}
+         */
         get strategy() {
             let strategy = this.isMany() ? 'many' : 'one';
             if (this.linkConfig.metadata) {
@@ -19,12 +27,12 @@ Q('service quantum.collection-links.link', {
             return strategy;
         }
 
+        /**
+         * Returns the field name in the document where the actual relationships are stored.
+         * @returns string
+         */
         get linkStorageField() {
             return this.linkConfig.field;
-        }
-
-        get defaultFieldPrefix() {
-            return this.linkName + '_' + this.linkConfig.collection
         }
 
         constructor(mainCollection, linkName, linkConfig) {
@@ -39,6 +47,7 @@ Q('service quantum.collection-links.link', {
         }
 
         /**
+         * The collection that is linked with the current collection
          * @returns {Q('collection')}
          */
         getLinkedCollection() {
@@ -46,6 +55,7 @@ Q('service quantum.collection-links.link', {
         }
 
         /**
+         * The collection that represents the direction of the linker
          * @returns {Q('collection')}
          */
         getMainCollection() {
@@ -82,7 +92,7 @@ Q('service quantum.collection-links.link', {
          */
         _validate() {
             if (typeof(this.linkConfig) === 'string') {
-                return this._prepareVirtualField();
+                return this._prepareVirtual();
             }
 
             if (!this.linkConfig.collection) {
@@ -95,7 +105,7 @@ Q('service quantum.collection-links.link', {
         /**
          * We need to apply same type of rules in this case.
          */
-        _prepareVirtualField() {
+        _prepareVirtual() {
             let [collection, relatedLinkName] = this.linkConfig.split(' ');
 
             let linkConfig = {
@@ -161,7 +171,7 @@ Q('service quantum.collection-links.link', {
          * @private
          */
         _extendSchema() {
-            if (!this.isVirtual()) { // meaning the linkStorage is on the other side.
+            if (!this.isVirtual()) { // meaning the linkStorageField is on the other side.
                 if (!this.linkConfig.field) {
                     this.linkConfig.field = this._generateFieldName();
                 }
@@ -178,15 +188,17 @@ Q('service quantum.collection-links.link', {
          * @private
          */
         _generateFieldName() {
+            let defaultFieldPrefix = this.linkName + '_' + this.linkConfig.collection;
+
             switch(this.strategy) {
                 case 'many-meta':
-                    return `${this.defaultFieldPrefix}_metas`;
+                    return `${defaultFieldPrefix}_metas`;
                 case 'many':
-                    return `${this.defaultFieldPrefix}_ids`;
+                    return `${defaultFieldPrefix}_ids`;
                 case 'one-meta':
-                    return `${this.defaultFieldPrefix}_meta`;
+                    return `${defaultFieldPrefix}_meta`;
                 case 'one':
-                    return `${this.defaultFieldPrefix}_id`;
+                    return `${defaultFieldPrefix}_id`;
             }
         }
 

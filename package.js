@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.1.7',
+    version: '1.1.8',
     summary: 'The Quantum Framework',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -63,6 +63,7 @@ Package.onUse(function (api) {
         'plugins/both/runner.js',
         'plugins/both/enum.js',
         'plugins/both/service.js',
+        'plugins/both/factory.js',
         'plugins/both/collection.js',
         'plugins/both/collection-links/collection-links.js',
         'plugins/both/collection-hooks.js',

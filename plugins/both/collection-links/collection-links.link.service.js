@@ -188,7 +188,8 @@ Q('service quantum.collection-links.link', {
          * @private
          */
         _generateFieldName() {
-            let defaultFieldPrefix = this.linkName + '_' + this.linkConfig.collection;
+            let cleanedCollectionName = this.linkConfig.collection.replace(/\./g, '_');
+            let defaultFieldPrefix = this.linkName + '_' + cleanedCollectionName;
 
             switch(this.strategy) {
                 case 'many-meta':
@@ -209,16 +210,18 @@ Q('service quantum.collection-links.link', {
          * @private
          */
         _attachSchema() {
-            let fieldSchema;
+            let fieldSchema, metadata = this.linkConfig.metadata;
 
-            if (this.isMany()) {
-                if (this.linkConfig.metadata) {
-                    fieldSchema = {type: new [Object], blackbox: true}; // [ {_id: id1}, {_id: id2} ]
+            if (metadata) {
+                if (_.keys(metadata).length) {
+                    metadata._id = {type: String};
+                    let schema = new SimpleSchema(metadata);
+                    fieldSchema = (this.isMany()) ? {type: [schema]} : {type: schema};
                 } else {
-                    fieldSchema = {type: [String]}; // [ id1, id2, id3]
+                    fieldSchema = (this.isMany()) ? {type: [Object], blackbox: true} : {type: Object, blackbox: true};
                 }
             } else {
-                fieldSchema = {type: String}; // [id] only
+                fieldSchema = (this.isMany()) ? {type: [String]} : {type: String};
             }
 
             fieldSchema.optional = true;

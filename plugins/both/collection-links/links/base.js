@@ -53,11 +53,17 @@ export class Link {
      * @returns {*|{content}|any}
      */
     fetch(filters, options, ...others) {
-        if (this.isSingle) {
-            return _.first(this.find(filters, options, ...others).fetch());
-        }
-
         return this.find(filters, options, ...others).fetch();
+    }
+
+    /**
+     * @param filters
+     * @param options
+     * @param others
+     * @returns {*|{content}|any}
+     */
+    fetchOne(filters, options, ...others) {
+        return _.first(this.fetch(filters, options, ...others));
     }
 
     /**

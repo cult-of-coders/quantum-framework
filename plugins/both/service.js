@@ -1,14 +1,4 @@
-let factory = class {
-    constructor(_class) {
-        this._class = _class;
-    }
-    build(...args) {
-        return new this._class(...args);
-    }
-    extend(object) {
-        _.extend(this._class, object);
-    }
-};
+import {Factory} from './lib/factory.js';
 
 let plugin = class extends Quantum.Model.Plugin {
     build(atom) {
@@ -21,7 +11,7 @@ let plugin = class extends Quantum.Model.Plugin {
 
         if (config.definition instanceof Function) {
             if (config.factory) {
-                return new factory(config.definition);
+                return new Factory(config.definition);
             }
 
             return new config.definition;
@@ -45,3 +35,4 @@ let plugin = class extends Quantum.Model.Plugin {
 };
 
 Quantum.instance.plugin('service', plugin);
+

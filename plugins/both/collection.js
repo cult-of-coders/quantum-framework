@@ -40,8 +40,8 @@ var plugin = class extends Quantum.Model.Plugin {
             },
             model: {
                 type: Object,
-                optional: true,
-                blackbox: true
+                blackbox: true,
+                defaultValue: {}
             },
             'schema': {
                 type: null,

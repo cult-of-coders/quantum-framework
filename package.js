@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.1.6_2',
+    version: '1.1.7',
     summary: 'The Quantum Framework',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -38,7 +38,6 @@ Package.onUse(function (api) {
         'reywood:publish-composite@1.4.2',
         'aldeed:collection2@2.9.1',
         'aldeed:simple-schema@1.5.3',
-        'dburles:collection-helpers@1.0.4',
         'meteorhacks:ssr@2.2.0'
     ];
 
@@ -56,11 +55,13 @@ Package.onUse(function (api) {
 
     // plugins
     api.addFiles([
+        'lib/collection-helpers.lib.js',
         'plugins/both/datastore.js',
         'plugins/both/schema.js',
         'plugins/both/enum.js',
         'plugins/both/service.js',
         'plugins/both/collection.js',
+        'plugins/both/collection-links/collection-links.js',
         'plugins/both/collection-hooks.js',
         'plugins/both/collection-behavior.js',
         'plugins/both/user.js',
@@ -108,6 +109,11 @@ Package.onUse(function (api) {
 
 Package.onTest(function (api) {
     api.use('ecmascript');
-    api.use('tinytest');
+    api.use('practicalmeteor:mocha');
+    api.use('practicalmeteor:chai');
     api.use('cultofcoders:quantum-framework');
+
+    api.addFiles([
+        'plugins/both/collection-links/collection-links.test.js'
+    ], 'server')
 });

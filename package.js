@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.1.8_4',
+    version: '1.1.8_5',
     summary: 'The Quantum Framework',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -110,10 +110,13 @@ Package.onUse(function (api) {
     api.addFiles([
         'lib/query/query.plugin.js',
         'lib/query/query-parser.service.js',
-        'lib/query/query-builder.service.js'
+        'lib/query/query-builder.service.js',
+        'lib/query/query-static.service.js'
     ]);
+
     api.addFiles([
         'lib/query/query.publication.js',
+        'lib/query/query.method.js',
         'lib/query/query-fetcher.service.js'
     ], 'server');
 

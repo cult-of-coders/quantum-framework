@@ -22,9 +22,6 @@ let plugin = class extends Quantum.Model.Plugin {
         })
     }
 
-    schema() {
-    }
-
     executionContext() {
         return 'instant';
     }

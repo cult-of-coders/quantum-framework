@@ -71,7 +71,8 @@ var plugin = class extends Quantum.Model.Plugin {
             },
             composition: {
                 type: [Object],
-                optional: true
+                optional: true,
+                blackbox: true
             },
             maxLimit: {
                 type: Number,

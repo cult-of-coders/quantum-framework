@@ -4,12 +4,11 @@ var plugin = class extends Quantum.Model.Plugin {
     }
 
     validate(config) {
-        let allowedWhens = ['onCreated', 'onRendered', 'onDestroyed'];
+        let allowedWhens = ['onCreated', 'onRendered', 'onDestroyed', 'events', 'helpers'];
         _.each(config, (handler, when) => {
-            check(handler, Function);
             check(when, String);
             if (!_.contains(allowedWhens, when)) {
-                throw new Meteor.Error('invalid-config', `${when} is not a valid event. Allowing only: onCreated, onRendered, onDestroyed`);
+                throw new Meteor.Error('invalid-config', `${when} is not a valid event. Allowing only: onCreated, onRendered, onDestroyed, events, helpers`);
             }
         });
     }

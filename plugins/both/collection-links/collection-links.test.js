@@ -3,7 +3,8 @@ describe('Collection Links', function () {
         links: {
             'comments': {
                 type: '*',
-                collection: 'comment'
+                collection: 'comment',
+                field: 'commentIds'
             },
             'metaComments': {
                 type: '*',
@@ -120,5 +121,9 @@ describe('Collection Links', function () {
 
         post.comments().add(comment);
         assert.lengthOf(comment.post().find().fetch(), 1);
+
+        Q('collection comment').remove(comment._id);
+        post = Q('collection post').findOne(postId);
+        assert.notInclude(post.commentIds, comment._id);
     })
 });

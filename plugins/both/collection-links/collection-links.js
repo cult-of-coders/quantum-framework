@@ -11,9 +11,11 @@ let plugin = class extends Quantum.Model.Plugin {
         });
 
         _.each(atom.config, (linkConfig, linkName) => {
+            let linkService = Q('service quantum.collection-links.link').build(atom.name, linkName, linkConfig);
+
             atom.linkStore[linkName] = {
                 config: linkConfig,
-                service: Q('service quantum.collection-links.link').build(atom.name, linkName, linkConfig)
+                service: linkService
             };
         });
 

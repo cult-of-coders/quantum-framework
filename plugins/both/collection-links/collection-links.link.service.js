@@ -44,6 +44,11 @@ Q('service quantum.collection-links.link', {
             this._validate();
             this._extendSchema();
             this._extendHelpers();
+
+            // if it's a virtual field make sure that when this is deleted, it will be removed from the references
+            if (this.isVirtual()) {
+                this._handleReferenceRemoval();
+            }
         }
 
         /**
@@ -229,6 +234,24 @@ Q('service quantum.collection-links.link', {
             this.getLinkedCollection().attachSchema({
                 [this.linkConfig.field]: fieldSchema
             });
+        }
+
+        /**
+         * When a link that is declared virtual is removed, the reference will be removed from every other link.
+         * @private
+         */
+        _handleReferenceRemoval() {
+            this.getMainCollection().before.remove((userId, doc) => {
+                let accessor = this.createAccessor(doc);
+                _.each(accessor.fetch(), linkedObj => {
+                    let linker = linkedObj[this.linkConfig.relatedLinkName]();
+                    if (linker.remove) {
+                        linker.remove(doc);
+                    } else {
+                        linker.unset();
+                    }
+                });
+            })
         }
     }
 });

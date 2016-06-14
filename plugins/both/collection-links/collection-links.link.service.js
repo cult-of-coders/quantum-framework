@@ -71,14 +71,14 @@ Q('service quantum.collection-links.link', {
          * If the relationship for this link is of "many" type.
          */
         isMany() {
-            return !_.contains(this.oneTypes, this.linkConfig.type);
+            return !this.isSingle();
         }
 
         /**
          * @returns {boolean}
          */
         isSingle() {
-            return !this.isMany();
+            return _.contains(this.oneTypes, this.linkConfig.type);
         }
 
         /**

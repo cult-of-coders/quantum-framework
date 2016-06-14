@@ -75,6 +75,13 @@ Q('service quantum.collection-links.link', {
         }
 
         /**
+         * @returns {boolean}
+         */
+        isSingle() {
+            return !this.isMany();
+        }
+
+        /**
          *
          * @returns {boolean}
          */

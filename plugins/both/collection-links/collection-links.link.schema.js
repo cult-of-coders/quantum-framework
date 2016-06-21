@@ -1,6 +1,8 @@
 Q('schema quantum.collection-links.link', {
     type: {
-        type: String
+        type: String,
+        optional: true,
+        defaultValue: 'one'
     },
     collection: {
         type: String,
@@ -13,6 +15,10 @@ Q('schema quantum.collection-links.link', {
     metadata: {
         type: null,
         blackbox: true,
+        optional: true
+    },
+    resolve: {
+        type: Function,
         optional: true
     }
 });

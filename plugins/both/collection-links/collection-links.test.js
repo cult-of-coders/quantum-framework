@@ -1,4 +1,8 @@
 describe('Collection Links', function () {
+    Q('collection test.uploads', {
+
+    });
+
     Q('collection post', {
         links: {
             'comments': {
@@ -18,6 +22,13 @@ describe('Collection Links', function () {
                 metadata: {},
                 collection: 'category',
                 type: '1'
+            },
+            pictures: {
+                resolve(object) {
+                    return Q('collection test.uploads').find({
+                        resourceId: object._id
+                    })
+                }
             }
         }
     });
@@ -125,5 +136,15 @@ describe('Collection Links', function () {
         Q('collection comment').remove(comment._id);
         post = Q('collection post').findOne(postId);
         assert.notInclude(post.commentIds, comment._id);
+    });
+
+    it('Tests proper resolver', function () {
+
+        let postId = Q('collection post').insert({'text': 'abc'});
+        let uploadId = Q('collection test.uploads').insert({'resourceId': postId});
+
+        let post = Q('collection post').findOne(postId);
+
+        assert.lengthOf(post.pictures().fetch(), 1);
     })
 });

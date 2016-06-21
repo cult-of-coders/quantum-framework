@@ -14,7 +14,7 @@ export class LinkResolve {
         let data;
 
         const potentialCursor = this.find();
-        if (potentialCursor._mongo) {
+        if (potentialCursor && potentialCursor._mongo) {
             data = potentialCursor.fetch();
         } else {
             data = potentialCursor;

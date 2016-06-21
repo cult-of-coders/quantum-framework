@@ -27,7 +27,7 @@ describe('Collection Links', function () {
                 resolve(object) {
                     return Q('collection test.uploads').find({
                         resourceId: object._id
-                    })
+                    }).fetch();
                 }
             }
         }

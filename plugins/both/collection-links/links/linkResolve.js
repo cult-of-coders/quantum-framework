@@ -4,22 +4,13 @@ export class LinkResolve {
         this.object = object;
     }
 
-    find() {
+    find(...args) {
         const config = this.linker.linkConfig;
 
-        return config.resolve(this.object);
+        return config.resolve(this.object, ...args);
     }
 
-    fetch() {
-        let data;
-
-        const potentialCursor = this.find();
-        if (potentialCursor && potentialCursor._mongo) {
-            data = potentialCursor.fetch();
-        } else {
-            data = potentialCursor;
-        }
-
-        return data;
+    fetch(...args) {
+        return this.find(...args);
     }
 }

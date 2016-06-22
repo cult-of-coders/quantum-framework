@@ -95,7 +95,7 @@ Q('service quantum.collection-links.link', {
          * @returns {boolean}
          */
         isVirtual() {
-            return this.linkConfig.virtual;
+            return !! this.linkConfig.virtual;
         }
 
         /**
@@ -157,6 +157,9 @@ Q('service quantum.collection-links.link', {
             linkConfig.relatedLinker = relatedLink.service;
             linkConfig.relatedLinkConfig = relatedLink.config;
 
+            console.log(linkConfig);
+            console.log('--------------------');
+
             this.linkConfig = linkConfig;
         }
 
@@ -203,15 +206,20 @@ Q('service quantum.collection-links.link', {
          * @private
          */
         _extendSchema() {
-            if (!this.isVirtual() && !this.isResolver()) { // meaning the linkStorageField is on the other side.
-                if (!this.linkConfig.field) {
-                    this.linkConfig.field = this._generateFieldName();
-                }
+            if (this.isVirtual() || this.isResolver()) {
+                return;
+            }
 
-                let collectionAtom = QF.use('collection', this.linkConfig.collection, true);
-                if (collectionAtom.config.schema) {
-                    this._attachSchema();
-                }
+            console.log(this.linkConfig);
+            console.log(this.linkName);
+
+            if (!this.linkConfig.field) {
+                this.linkConfig.field = this._generateFieldName();
+            }
+
+            let collectionAtom = QF.use('collection', this.linkConfig.collection, true);
+            if (collectionAtom.config.schema) {
+                this._attachSchema();
             }
         }
 
@@ -258,7 +266,7 @@ Q('service quantum.collection-links.link', {
 
             fieldSchema.optional = true;
 
-            this.getLinkedCollection().attachSchema({
+            this.getMainCollection().attachSchema({
                 [this.linkConfig.field]: fieldSchema
             });
         }

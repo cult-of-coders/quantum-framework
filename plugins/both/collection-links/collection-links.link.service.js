@@ -157,9 +157,6 @@ Q('service quantum.collection-links.link', {
             linkConfig.relatedLinker = relatedLink.service;
             linkConfig.relatedLinkConfig = relatedLink.config;
 
-            console.log(linkConfig);
-            console.log('--------------------');
-
             this.linkConfig = linkConfig;
         }
 
@@ -210,14 +207,11 @@ Q('service quantum.collection-links.link', {
                 return;
             }
 
-            console.log(this.linkConfig);
-            console.log(this.linkName);
-
             if (!this.linkConfig.field) {
                 this.linkConfig.field = this._generateFieldName();
             }
 
-            let collectionAtom = QF.use('collection', this.linkConfig.collection, true);
+            let collectionAtom = QF.use('collection', this.mainCollection, true);
             if (collectionAtom.config.schema) {
                 this._attachSchema();
             }

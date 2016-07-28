@@ -35,20 +35,6 @@ let plugin = class extends Quantum.Model.Plugin {
 
 QF.plugin('collection-behavior', plugin);
 
-Q('collection-hooks').extend({
-    behaviors: {
-        type: [String],
-        optional: true
-    }
-}, function(atom) {
-    let config = atom.config;
-    if (config.behaviors) {
-        _.each(config.behaviors, (behaviorName) => {
-            QF.use('collection-behavior').attachBehavior(atom.name, behaviorName);
-        })
-    }
-});
-
 Q('collection').extend({
     behaviors: {
         type: [String],

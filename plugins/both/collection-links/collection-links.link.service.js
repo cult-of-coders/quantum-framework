@@ -2,6 +2,7 @@ import {LinkMany} from './links/linkMany.js';
 import {LinkManyMeta} from './links/linkManyMeta.js';
 import {LinkOne} from './links/linkOne.js';
 import {LinkOneMeta} from './links/linkOneMeta.js';
+import {LinkResolve} from './links/linkResolve.js';
 
 Q('service quantum.collection-links.link', {
     factory: true,
@@ -19,6 +20,10 @@ Q('service quantum.collection-links.link', {
          * @returns {string}
          */
         get strategy() {
+            if (this.isResolver()) {
+                return 'resolver';
+            }
+
             let strategy = this.isMany() ? 'many' : 'one';
             if (this.linkConfig.metadata) {
                 strategy += '-meta';
@@ -56,6 +61,11 @@ Q('service quantum.collection-links.link', {
          * @returns {Q('collection')}
          */
         getLinkedCollection() {
+            // if our link is a resolver, then we really don't have a linked collection.
+            if (this.isResolver()) {
+                return null;
+            }
+
             return QF.use('collection', this.linkConfig.collection);
         }
 
@@ -82,11 +92,17 @@ Q('service quantum.collection-links.link', {
         }
 
         /**
-         *
          * @returns {boolean}
          */
         isVirtual() {
-            return this.linkConfig.virtual;
+            return !! this.linkConfig.virtual;
+        }
+
+        /**
+         * @returns {boolean}
+         */
+        isResolver() {
+            return _.isFunction(this.linkConfig.resolve);
         }
 
         /**
@@ -107,8 +123,12 @@ Q('service quantum.collection-links.link', {
                 return this._prepareVirtual();
             }
 
-            if (!this.linkConfig.collection) {
-                this.linkConfig.collection = this.linkName;
+            if (this.linkConfig.resolve) {
+                // if it has a resolver then when we retrieve data we do it via it.
+            } else {
+                if (!this.linkConfig.collection) {
+                    this.linkConfig.collection = this.linkName;
+                }
             }
 
             Q('schema quantum.collection-links.link').validate(this.linkConfig);
@@ -145,20 +165,19 @@ Q('service quantum.collection-links.link', {
          * @private
          */
         _extendHelpers() {
-            //console.log('extending helpers' + this.linkName);
             let helperName = this.linkName;
             let linker = this;
+            let symbol = Symbol('accessor');
 
             this.getMainCollection().helpers({
                 [helperName]: function() {
-                    let cacheFieldName = `_${helperName}_link`;
-                    if (this[cacheFieldName]) {
-                        return this[cacheFieldName];
+                    if (this[symbol]) {
+                        return this[symbol];
                     }
 
-                    this[cacheFieldName] = linker.createAccessor(this);
+                    this[symbol] = linker.createAccessor(this);
 
-                    return this[cacheFieldName];
+                    return this[symbol];
                 }
             });
         }
@@ -169,6 +188,7 @@ Q('service quantum.collection-links.link', {
          */
         _getHelperClass() {
             switch (this.strategy) {
+                case 'resolver': return LinkResolve;
                 case 'many-meta': return LinkManyMeta;
                 case 'many': return LinkMany;
                 case 'one-meta': return LinkOneMeta;
@@ -183,15 +203,17 @@ Q('service quantum.collection-links.link', {
          * @private
          */
         _extendSchema() {
-            if (!this.isVirtual()) { // meaning the linkStorageField is on the other side.
-                if (!this.linkConfig.field) {
-                    this.linkConfig.field = this._generateFieldName();
-                }
+            if (this.isVirtual() || this.isResolver()) {
+                return;
+            }
 
-                let collectionAtom = QF.use('collection', this.linkConfig.collection, true);
-                if (collectionAtom.config.schema) {
-                    this._attachSchema();
-                }
+            if (!this.linkConfig.field) {
+                this.linkConfig.field = this._generateFieldName();
+            }
+
+            let collectionAtom = QF.use('collection', this.mainCollection, true);
+            if (collectionAtom.config.schema) {
+                this._attachSchema();
             }
         }
 
@@ -238,7 +260,7 @@ Q('service quantum.collection-links.link', {
 
             fieldSchema.optional = true;
 
-            this.getLinkedCollection().attachSchema({
+            this.getMainCollection().attachSchema({
                 [this.linkConfig.field]: fieldSchema
             });
         }

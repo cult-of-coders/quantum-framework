@@ -41,7 +41,7 @@ var plugin = class extends Quantum.Model.Plugin {
             model: {
                 type: Object,
                 blackbox: true,
-                defaultValue: {}
+                optional: true
             },
             'schema': {
                 type: null,

@@ -25,7 +25,7 @@ Q = function(string, config) {
 
 MQ = function (plugin, config) {
   _.each(config, (atomConfig, atomName) => {
-        Q(atomName, atomConfig);
+        QF.add(plugin, atomName, atomConfig);
     })
 };
 

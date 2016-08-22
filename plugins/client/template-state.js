@@ -37,6 +37,6 @@ Quantum.instance.plugin('template').extend({
     if (atom.config.state) {
         QF.add('template-state', atom.name, atom.config.state);
     }
-});
+}, 'pre:build');
 
 Quantum.instance.plugin('template-state', plugin);

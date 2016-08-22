@@ -1,6 +1,6 @@
 Package.describe({
     name: 'cultofcoders:quantum-framework',
-    version: '1.1.10_11',
+    version: '1.1.10_12',
     summary: 'The Quantum Framework',
     git: 'https://github.com/cult-of-coders/quantum-framework.git',
     documentation: 'README.md'
@@ -29,6 +29,7 @@ Package.onUse(function (api) {
         'check',
         'random',
         'reactive-var',
+        'reactive-dict',
         'standard-minifiers',
         'es5-shim',
         'ecmascript',
